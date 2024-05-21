@@ -3,5 +3,5 @@
 <br/><br/>
 
 <p>섹션 0. 강의 소개<p/>
-    <a href="https://stbhg5.tistory.com/371">개발 환경 준비하</a><br/>
+    <a href="https://stbhg5.tistory.com/371">개발 환경 준비하기</a><br/>
     <br/>
