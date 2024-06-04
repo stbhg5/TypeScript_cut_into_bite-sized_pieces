@@ -8,4 +8,5 @@
 
 <p>섹션 1. 타입스크립트 개론<p/>
     <a href="https://stbhg5.tistory.com/372?category=1097664">타입스크립트를 소개합니다</a><br/>
+    <a href="https://stbhg5.tistory.com/373">자바스크립트의 한계점과 타입스크립트</a><br/>
     <br/>
