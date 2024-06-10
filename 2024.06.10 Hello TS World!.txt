@@ -1,0 +1,192 @@
+[2024.06.10 Hello TS World!]
+
+한 입 크기로 잘라먹는 타입스크립트 - Hello TS World
+
+onebite-typescript\section1 폴더 경로를 vscode 로 연 뒤에 터미널에서 node.js 패키지 초기화 명령어 입력. 이후 전부 enter 눌러 기본값으로 설정.
+
+- Terminal
+npm init
+    This utility will walk you through creating a package.json file.
+    It only covers the most common items, and tries to guess sensible defaults.
+
+    See `npm help init` for definitive documentation on these fields
+    and exactly what they do.
+
+    Use `npm install <pkg>` afterwards to install a package and
+    save it as a dependency in the package.json file.
+
+    Press ^C at any time to quit.
+    package name: (section1)
+    version: (1.0.0)                                                                                                                                                                                                                 
+    description:                                                                                                                                                                                                                     
+    entry point: (index.js)                                                                                                                                                                                                          
+    test command:                                                                                                                                                                                                                    
+    git repository:                                                                                                                                                                                                                  
+    keywords:                                                                                                                                                                                                                        
+    author:                                                                                                                                                                                                                          
+    license: (ISC)                                                                                                                                                                                                                   
+    About to write to D:\개발\인프런\한 입 크기로 잘라먹는 타입스크립트(TypeScript)\onebite-typescript\section1\package.json:
+
+    {
+    "name": "section1",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC"
+    }
+
+    Is this OK? (yes)
+    npm notice 
+    npm notice New minor version of npm available! 10.2.3 -> 10.8.1
+    npm notice Changelog: https://github.com/npm/cli/releases/tag/v10.8.1
+    npm notice Run npm install -g npm@10.8.1 to update!
+    npm notice
+
+패키지가 초기화되면 package.json 파일이 생성된다.
+
+node.js 가 제공하는 내장 기능들에 대한 타입 정보를 가진 types/node 라는 패키지를 설치해야 한다.
+
+- Terminal
+npm i @types/node
+
+    added 2 packages, and audited 3 packages in 798ms
+
+    found 0 vulnerabilities
+
+설치 후 package.json 파일을 열어보면 "dependencies" 에 설치된 것을 확인할 수 있다.
+node_modules 폴더 안에 파일들을 열어보면, node.js 에서 기본적으로 제공하는 기능들의 타입이 미리 외부 패키지에 정의되어 있는 것을 확인할 수 있다.
+이 패키지를 설치하지 않으면, 타입스크립트가 작성한 코드를 컴파일 하는 과정에서 타입을 알아듣지 못하기 때문에 반드시 설치해야 한다.
+
+이제 타입스크립트 컴파일러를 설치한다. 글로벌 옵션으로 설치한다. 그러면 컴퓨터 모든 곳에서 패키지를 사용할 수 있다.
+
+- Terminal
+npm install typescript -g
+
+    added 1 package in 1s
+
+만약 권한 오류가 뜬다면 관리자 권한으로 명령 프롬프트를 실행하여 명령어를 입력하여 실행한다.
+
+* 스크립트 실행 권한 수정
+참고링크 : https://singa-korean.tistory.com/21
+관리자 권한으로 Windows PowerShell 실행.
+
+- 관리자 권한 Windows PowerShell
+get-help Set-ExecutionPolicy
+
+    이름
+        Set-ExecutionPolicy
+
+    개요
+        Sets the PowerShell execution policies for Windows computers.
+
+
+    구문
+        Set-ExecutionPolicy [-ExecutionPolicy] {AllSigned | Bypass | Default | RemoteSigned | Restricted | Undefined | Unre
+        stricted} [[-Scope] {CurrentUser | LocalMachine | MachinePolicy | Process | UserPolicy}] [-Force] [-Confirm] [-What
+        If] [<CommonParameters>]
+
+
+    설명
+        The `Set-ExecutionPolicy` cmdlet changes PowerShell execution policies for Windows computers. For more information,
+        see about_Execution_Policies (../Microsoft.PowerShell.Core/about/about_Execution_Policies.md).
+
+        An execution policy is part of the PowerShell security strategy. Execution policies determine whether you can load
+        configuration files, such as your PowerShell profile, or run scripts. And, whether scripts must be digitally signed
+        before they are run.
+
+        The `Set-ExecutionPolicy` cmdlet's default scope is `LocalMachine`, which affects everyone who uses the computer. T
+        o change the execution policy for `LocalMachine`, start PowerShell with **Run as Administrator**.
+
+        To display the execution policies for each scope, use `Get-ExecutionPolicy -List`. To see the effective execution p
+        olicy for your PowerShell session use `Get-ExecutionPolicy` with no parameters.
+
+
+    관련 링크
+        Online Version: https://learn.microsoft.com/powershell/module/microsoft.powershell.security/set-executionpolicy?vie
+        w=powershell-5.1&WT.mc_id=ps-gethelp
+        about_Execution_Policies
+        about_Group_Policy_Settings
+        about_Providers
+        Get-AuthenticodeSignature
+        Get-ChildItem
+        Get-ExecutionPolicy
+        Invoke-Command
+        Set-AuthenticodeSignature
+        Unblock-File
+
+    설명
+        예를 보려면 다음과 같이 입력하십시오. "get-help Set-ExecutionPolicy -examples".
+        자세한 내용을 보려면 다음과 같이 입력하십시오. "get-help Set-ExecutionPolicy -detailed".
+        기술적인 내용을 보려면 다음과 같이 입력하십시오. "get-help Set-ExecutionPolicy -full".
+        온라인 도움말을 보려면 다음을 입력하십시오."get-help Set-ExecutionPolicy -online"
+
+
+Set-ExecutionPolicy RemoteSigned
+
+    실행 규칙 변경
+    실행 정책은 신뢰하지 않는 스크립트로부터 사용자를 보호합니다. 실행 정책을 변경하면 about_Execution_Policies 도움말
+    항목(https://go.microsoft.com/fwlink/?LinkID=135170)에 설명된 보안 위험에 노출될 수 있습니다. 실행 정책을
+    변경하시겠습니까?
+    [Y] 예(Y)  [A] 모두 예(A)  [N] 아니요(N)  [L] 모두 아니요(L)  [S] 일시 중단(S)  [?] 도움말 (기본값은 "N"): Y
+
+잘 설치되었는지 버전을 확인한다.
+
+- Terminal
+tsc -version
+    Version 5.4.5
+
+section1\src 폴더를 만든 후 해당 폴더에 index.ts 파일을 생성한다.
+
+- index.ts
+console.log("Hello TypeScript");
+const a: number = 1;
+
+이후 타입스크립트 코드를 컴파일 한다.
+
+- Terminal
+tsc src/index.ts
+
+section1\src 경로에 index.js 파일이 생성된 것을 볼 수 있다. 타입스크립트를 컴파일한 결과 생성된 자바스크립트 파일을 확인할 수 있다.
+자바스크립트 코드에는 타입스크립트에서 명시한 number 타입이 사라진 것을 볼 수 있다.
+
+컴파일된 자바스크립트 코드를 실행할 때 node 를 이용한다.
+
+- Terminal
+node src/index.js
+    Hello TypeScript
+
+이후 index.js 파일을 삭제한다.
+ts 파일을 js 파일로 변환한 뒤, js 파일을 node 나 브라우저로 실행시키는 과정을 이해했지만, 좀 더 편리하게 쓰는 도구를 설치한다.
+(ts-node 는 Node 20 버전 이상에서 더 이상 동작하지 않으므로, tsx 로 대체)
+
+- Terminal
+npm install tsx -g
+
+    added 5 packages in 3s
+
+    2 packages are looking for funding
+    run `npm fund` for details
+
+tsx는 단 한번의 명령어로 타입스크립트 코드를 실행시켜주는 도구이다.
+설치가 잘 되었는지 확인한다.
+
+- Terminal
+tsx -v
+    tsx v4.15.1
+    node v20.10.0
+
+현재 설치된 Node.js의 버전도 함께 출력된다.
+tsx를 이용해 타입스크립트 파일을 실행한다.
+
+- Terminal
+tsx src/index.ts
+    Hello TypeScript
+
+타입스크립트 파일을 한 방에 실행시켜 준다.
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
