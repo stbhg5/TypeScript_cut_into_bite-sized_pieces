@@ -11,4 +11,5 @@
     <a href="https://stbhg5.tistory.com/373">자바스크립트의 한계점과 타입스크립트</a><br/>
     <a href="https://stbhg5.tistory.com/374">타입스크립트의 동작 원리</a><br/>
     <a href="https://stbhg5.tistory.com/375">Hello TS World!</a><br/>
+    <a href="https://stbhg5.tistory.com/376">타입스크립트 컴파일러 옵션 설정하기</a><br/>
     <br/>
