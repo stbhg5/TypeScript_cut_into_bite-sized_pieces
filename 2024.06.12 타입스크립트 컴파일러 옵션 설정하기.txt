@@ -1,0 +1,300 @@
+[2024.06.12 타입스크립트 컴파일러 옵션 설정하기]
+
+한 입 크기로 잘라먹는 타입스크립트 - 타입스크립트 컴파일러 옵션 설정하기
+
+* 컴파일러 옵션
+1) 얼마나 엄격하게 타입 오류를 검사할지?
+2) 컴파일 결과 생성된 자바스크립트 코드의 버전은 어떻게 할지?
+...
+→ 프로젝트의 상황, 사람, 팀에 따라 입맛대로 설정
+→ node.js 패키지 단위로 설정 가능
+
+tsc 도구를 이용하여 기본적인 옵션이 자동으로 설정된 컴파일러 옵션 파일 자동으로 생성한다.
+
+- Terminal
+tsc --init
+    Created a new tsconfig.json with:                                                                                       
+                                                                                                                        TS 
+    target: es2016
+    module: commonjs
+    strict: true
+    esModuleInterop: true
+    skipLibCheck: true
+    forceConsistentCasingInFileNames: true
+
+
+    You can learn more at https://aka.ms/tsconfig
+
+section1 폴더에 tsconfig.json 이라는 타입스크립트 컴파일러 설정 파일이 생성된다.
+tsconfig.json 파일의 내용을 전부 지우고 하나씩 필요한 옵션을 설정한다.
+
+1. include
+tsc 가 컴파일할 타입스크립트 파일들의 범위와 위치를 알려주는 옵션.
+tsc 파일명 명령어를 통해 하나씩 컴파일 하려면 번거롭다. 이 때 include 옵션을 이용하면 특정 폴더 아래에 있는 모든 타입스크립트 파일을 동시에 한 번에 명령어로 컴파일하도록 설정할 수 있다.
+
+- tsconfig.json
+{
+  "include": ["src"]
+}
+
+src 라는 경로 아래에 있는 모든 파일을 컴파일한다.
+
+- Terminal
+tsc
+
+src 경로 아래 모든 파일을 컴파일한다. src 경로에 test.ts 타입스크립트 파일을 추가로 만든 뒤 다시 컴파일 한다.
+
+- test.ts
+console.log("Hello Test");
+
+- Terminal
+tsc
+
+src 경로 아래 2개의 타입스크립트 파일이 동시에 컴파일되는 것을 확인할 수 있다.
+
+2. target
+타입스크립트 코드를 컴파일해서 만들어지는 자바스크립트 코드의 버전을 설정하는 옵션.
+
+- tsconfig.json
+{
+  "include": ["src"],
+  "compilerOptions": {
+    "target": "ES5"
+  }
+}
+
+컴파일 결과 생성되는 자바스크립트 코드 버전이 옛날 버전인 ES5 버전으로 생성된다.
+src 경로에 test.ts 파일을 지우고 index.ts 파일을 수정한다.
+
+- index.ts
+// 화살표 함수
+const func = () => console.log("Hello");
+
+tsc 명령어로 컴파일 한다.
+
+- Terminal
+tsc
+
+컴파일 결과로 생성된 자바스크립트 파일을 열어본다.
+
+- index.js
+// 화살표 함수
+var func = function () { return console.log("Hello"); };
+
+화살표 함수가 아닌 함수 표현식으로 바뀌었다. ES5 버전엔 화살표 함수가 없기 때문이다.
+target 옵션 버전을 "ESNext"(자바스크립트 최신 버전) 로 변경 후 다시 한 번 컴파일 한다.
+
+- tsconfig.json
+{
+  "include": ["src"],
+  "compilerOptions": {
+    "target": "ESNext"
+  }
+}
+
+- Terminal
+tsc
+
+이 때 오류가 발생하는데, @types/node 설치시 함께 설치되는 undici-types 라는 라이브러리의 타입 검사 도중 발생하는 것이다. 따라서 tsconfig.json의 copmilerOptions 내부에 "skipLibCheck": true 옵션을 추가한다.
+위 옵션은 타입 정의 파일(.d.ts 확장자를 갖는 파일을 의미)의 타입 검사를 생략하는 옵션이다. 해당 옵션을 true로 설정하여 불필요한 타입 정의 파일의 타입 검사를 생략하도록 설정한다.
+
+- tsconfig.json
+{
+  "include": ["src"],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "target": "ESNext"
+  }
+}
+
+- index.js
+// 화살표 함수
+const func = () => console.log("Hello");
+
+tsconfig.json 파일에서 상세한 옵션 설정시 "compilerOptions" 항목 안에 옵션을 설정한다.
+
+3. module
+변환되는 자바스크립트의 모듈 시스템을 설정하는 옵션.
+
+- tsconfig.json
+{
+  "include": ["src"],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "target": "ESNext",
+    "module": "CommonJS"
+  }
+}
+
+src 경로에 hello.ts 파일을 생성하여 작성하고 index.ts 파일도 수정한다.
+
+- hello.ts
+// ES 모듈
+export const hello = () => {
+    console.log("hello");
+};
+
+- index.ts
+import { hello } from "./hello";
+
+hello();
+
+이후 컴파일을 진행한다.
+
+- Terminal
+tsc
+
+컴파일되어 생성된 자바스크립트 파일을 살펴보면,
+
+- hello.js
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.hello = void 0;
+// ES 모듈
+const hello = () => {
+    console.log("hello");
+};
+exports.hello = hello;
+
+- index.js
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const hello_1 = require("./hello");
+(0, hello_1.hello)();
+
+CommonJS 모듈 시스템의 키워드가 들어있다.
+다시 tsconfig.json 파일에서 ES 모듈 시스템으로 변경한다.
+
+- tsconfig.json
+{
+  "include": ["src"],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "target": "ESNext",
+    "module": "ESNext"
+  }
+}
+
+이후 다시 tsc 명령어로 컴파일을 진행 후 결과를 확인한다.
+
+- hello.js
+// ES 모듈
+export const hello = () => {
+    console.log("hello");
+};
+
+- index.js
+import { hello } from "./hello";
+hello();
+
+ES 모듈 시스템을 사용하는 자바스크립트 코드로 변환되었다.
+
+4. outDir
+컴파일 결과 생성될 자바스크립트 파일을 명시한 경로에 생성되도록 설정하는 옵션.
+
+- tsconfig.json
+{
+  "include": ["src"],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "outDir": "dist"
+  }
+}
+
+tsc 명령어로 컴파일하면 section1/dist 경로에 컴파일 결과로 생성된 자바스크립트 파일을 확인할 수 있다.
+
+5. strict
+타입스크립트 컴파일러가 타입 검사를 얼마나 엄격하게 검사할지 결정하는 옵션.
+강의중 가장 많이 조정할 중요한 옵션이다.
+
+hello.ts 파일 hello 함수에 매개변수를 추가한다.
+
+- hello.ts
+// ES 모듈
+export const hello = (message) => {
+    console.log("hello" + message);
+};
+
+오류가 없다. 이후 tsconfig.json 파일에 strict 속성을 추가한다.
+
+- tsconfig.json
+{
+  "include": ["src"],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "outDir": "dist",
+    "strict": true
+  }
+}
+
+hello.ts 파일 hello 함수에 오류가 발생한다. 타입스크립트가 코드를 엄격하게 검사한다.
+타입스크립트에서는 매개변수의 타입을 지정하도록 권장한다. 매개변수의 타입은 타입스크립트가 추론할 수 없기 때문이다.
+만약 자바스크립트를 타입스크립트로 새롭게 마이그레이션 하는 상황에서 strict 속성을 true 로 설정하면 기존 자바스크립트에 빨간줄이 생기며 대참사가 일어나기 때문에 false 로 설정하기도 한다.
+
+6. moduleDetection
+타입스크립트가 각각의 파일을 어떤 모듈로 감지할 것인지 결정하는 옵션.
+
+- hello.ts
+const a = 1;
+
+- index.ts
+const a = 1;
+
+이렇게 수정하면 '블록 범위 변수 'a'을(를) 다시 선언할 수 없습니다. hello.ts(1, 7): 여기서도 'a'이(가) 선언되었습니다.' 라는 오류가 발생한다. 즉, 동일한 이름의 변수를 똑같은 scope 에 2번 선언했다는 것이다.
+scope 는 이름이 공유되는 공간을 말한다. 타입스크립트는 기본적으로 모든 타입스크립트 파일을 전역 모듈(글로벌 모듈)로 본다.
+
+해결책 1. 모듈시스템을 사용하는 키워드를 파일 내에 1번 이상 작성한다. 그 파일은 독립된 모듈(개별 모듈)로 바라본다.
+
+- index.ts
+const a = 1;
+
+export {};
+
+export 나 import 키워드를 억지로 넣어서 해결하는 방법이다.
+
+해결책2. tsconfig.json 파일에 moduleDetection 옵션 추가.
+
+- tsconfig.json
+{
+  "include": ["src"],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "outDir": "dist",
+    "strict": true,
+    "moduleDetection": "force"
+  }
+}
+
+hello.ts 와 index.ts 에서 에러가 사라졌다.
+만약 기다렸음에도 에러가 사라지지 않으면 현재 작성한 tsconfig.json 파일 기준으로 타입 검사를 다시 수행하도록 시켜야 한다.
+Ctrl + Shift + P 를 눌러 'restart' 를 검색하여 'TypeScript: Restart TS Server' 를 클릭한다. 그럼 tsconfig.json 파일 기준으로 타입스크립트 파일들을 전부 다시 검사한다.
+이후 tsc 명령어를 통해 컴파일하면, 컴파일된 자바스크립트 파일에 export 와 같은 키워드가 자동으로 추가된 것을 확인할 수 있다. 타입스크립트 컴파일러가 모듈시스템을 사용하는 키워드를 자동으로 추가해주기 때문이다.
+
+- hello.js
+const a = 1;
+export {};
+
+- index.js
+const a = 1;
+export {};
+
+모든 파일이 개별 모듈로 취급되도록 만들어준다.
+자동으로 추가된 모듈시스템의 키워드가 ES 모듈인 이유는 tsconfig.json 파일 module 속성을 'ESNext' 로 설정했기 때문이다. 'CommonJS' 로 바꾸고 다시 컴파일하면 CommonJS 모듈 시스템을 사용하는 자바스크립트 코드로 변환된다.
+
+7. ts-node
+ts-node 를 사용하지 않고 tsx 를 사용하기 때문에 package.json 파일에 "type": "module" 속성을 추가하지 않아도 된다.
+또한 tsconfig.json 파일에 ts-node 가 ES 모듈시스템으로 동작하도록 하는 코드를 추가하지 않아도 된다.
+...
+"ts-node": {
+    "esm": true
+}
+...
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
