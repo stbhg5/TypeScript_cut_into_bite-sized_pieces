@@ -1,0 +1,145 @@
+[2024.06.17 기본타입]
+
+(섹션 2. 타입스크립트 기본)
+
+한 입 크기로 잘라먹는 타입스크립트 - 타입스크립트의 기본 타입
+
+- 기본타입
+타입스크립트가 자체적으로 제공하는 타입 - 내장 타입
+각 타입은 부모와 자식관계를 이루게 되며 계층 형성.
+
+1. 프로젝트 생성 및 환경 설정
+D:\개발\인프런\한 입 크기로 잘라먹는 타입스크립트(TypeScript)\onebite-typescript\section2 폴더 생성.
+이후 vscode 로 해당 경로 폴더를 연 뒤에 Node.js 패키지 초기화.
+
+- Terminal
+npm init
+    This utility will walk you through creating a package.json file.
+    It only covers the most common items, and tries to guess sensible defaults.
+
+    See `npm help init` for definitive documentation on these fields
+    and exactly what they do.
+
+    Use `npm install <pkg>` afterwards to install a package and
+    save it as a dependency in the package.json file.
+
+    Press ^C at any time to quit.
+    package name: (section2)
+    version: (1.0.0)                                                                                                                                                                                                                 
+    description:                                                                                                                                                                                                                     
+    entry point: (index.js)                                                                                                                                                                                                          
+    test command:                                                                                                                                                                                                                    
+    git repository:                                                                                                                                                                                                                  
+    keywords:                                                                                                                                                                                                                        
+    author:                                                                                                                                                                                                                          
+    license: (ISC)                                                                                                                                                                                                                   
+    About to write to D:\개발\인프런\한 입 크기로 잘라먹는 타입스크립트(TypeScript)\onebite-typescript\section2\package.json:
+
+    {
+    "name": "section2",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC"
+    }
+
+
+    Is this OK? (yes)
+
+Node.js 내장 기능들에 대한 타입 정보를 제공하는 @types/node 패키지 설치.
+
+- Terminal
+npm i @types/node
+
+    added 2 packages, and audited 3 packages in 947ms
+
+    found 0 vulnerabilities
+
+package.json 파일에서 설치가 완료된 것을 "dependencies" 내용을 통해 확인한다.
+
+- package.json
+{
+  "name": "section2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.14.2"
+  }
+}
+
+컴파일러 옵션을 설정하기 위해 tsconfig.json 파일을 section2 폴더에 생성한다.
+
+- tsconfig.json
+{
+  "include": ["src"],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "outDir": "dist",
+    "strict": true,
+    "moduleDetection": "force"
+  }
+}
+
+잘 설정했는지 확인해보기 위해 타입스크립트 파일을 만들고 컴파일해본다.
+section2\src\index.ts 파일을 생성한다.
+
+- index.ts
+console.log("Hello New Project");
+
+이후 터미널에서 컴파일한다.
+
+- Terminal
+tsc
+
+dist 폴더가 생성되고 컴파일 결과인 index.js 파일이 잘 생성된다.
+
+- index.js
+console.log("Hello New Project");
+export {};
+
+컴파일된 자바스크립트 파일을 실행하기 위해 package.json 파일에 "type": "module" 옵션을 추가하고 터미널에서 실행한다.
+("type": "module" 옵션 추가해야 Node.js 가 ES 모듈시스템 해석 가능)
+
+- package.json
+{
+  "name": "section2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.14.2"
+  }
+}
+
+- Terminal
+node dist/index.js
+    Hello New Project
+
+이렇게 tsc 활용하는 옵션을 모두 설정했다.
+
+- Terminal
+tsx src/index.ts
+    Hello New Project
+
+tsx 단 한번의 명령어로 타입스크립트 코드를 실행했다.
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
