@@ -13,3 +13,6 @@
     <a href="https://stbhg5.tistory.com/375">Hello TS World!</a><br/>
     <a href="https://stbhg5.tistory.com/376">타입스크립트 컴파일러 옵션 설정하기</a><br/>
     <br/>
+
+<p>섹션 2. 타입스크립트 기본<p/>
+    <a href="https://stbhg5.tistory.com/377">기본타입</a><br/>
