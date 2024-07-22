@@ -1,0 +1,76 @@
+[2024.07.22 원시타입과 리터럴타입]
+
+한 입 크기로 잘라먹는 타입스크립트 - 원시 타입
+
+- 원시타입 (Primitive Type)
+하나의 값만 저장하는 타입
+number, string, boolean, null, undefined
+
+- src/chapter1.ts
+// number
+let num1: number = 123; // 타입 주석(type annotation) : 타입스크립트에서 변수의 타입을 정의하는 가장 기본적인 방식
+let num2: number = -123; // 음수
+let num3: number = 0.123 // 양의 소수
+let num4: number = -0.123 // 음의 소수
+let num5: number = Infinity; // 양의 무한대
+let num6: number = -Infinity; // 음의 무한대
+let num7: number = NaN; // Not a Number
+
+// num1 = 'hello'; // 오류 발생
+// num1.toUpperCase(); // 문자열 전용 함수 사용 불가
+num1.toFixed(); // number 타입에만 적용 가능한 함수 사용 가능
+
+// string
+let str1: string = "hello"; // 쌍 따옴표
+let str2: string = 'hello'; // 작은 따옴표
+let str3: string = `hello`; // 백틱
+let str4: string = `hello ${num1}` // 템플릿 리터럴
+
+// str1 = 123; // 오류 발생
+// str1.toFixed(); // number 타입 전용 함수 사용 불가
+str1.toUpperCase(); // 문자열 전용 함수 사용 가능
+
+// boolean
+let bool1: boolean = true;
+let bool2: boolean = false;
+
+// null
+let null1: null = null;
+// null1 = 1; // null 이외 다른값 담을 수 없음
+
+// undefined
+let unde1: undefined = undefined;
+
+// 임시로 null 값을 넣는 속성 - "strictNullChecks": false
+// let numA: number = null; // 임시로 넣게 해줌
+
+// 리터럴 타입 : 값 그 자체가 타입이 된다.
+// 리터럴 -> 값
+let numA: 10 = 10; // 숫자형
+// numA = 12; // 타입으로 정의된 값 외에 다른 값 넣을 수 없음
+let strA: 'hello' = 'hello'; // 문자열
+// strA = 'df'; // 오류 발생
+let boolA: true = true;
+// boolA: true = false; // 오류 발생
+
+원시타입에 추가로 리터럴 타입도 알아봤다.
+임시로 null 값을 넣는 속성은 tsconfig.json 에 추가한다.
+
+- tsconfig.json
+{
+    "include": ["src"], // 컴파일할 타입스크립트 파일이 있는 폴더
+    "compilerOptions": {
+        "skipLibCheck": true,
+        "target": "ESNext", // 컴파일되는 자바스크립트 버전
+        "module": "ESNext", // 컴파일되는 자바스크립트 모듈시스템
+        "outDir": "dist", // 컴파일되는 자바스크립트 파일 생성될 경로
+        "strict": true, // 엄격한 타입 검사 (strictNullChecks 옵션의 상위 옵션 - 켜면 하위도 켜지고 끄면 하위도 꺼짐)
+        "moduleDetection": "force", // 자동으로 모든 타입스크립트 파일 개별 모듈로 취급
+        "strictNullChecks": true // 엄격한 null 검사 : null 타입이 아닌 변수에 null 값 할당 허용 여부 옵션
+    }
+}
+
+* Ctrl + Shift + P → restart : 타입스크립트 서버 재시작
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
