@@ -1,0 +1,75 @@
+[2024.07.28 Any와 Unknown]
+
+한 입 크기로 잘라먹는 타입스크립트 - Any 타입과 Unknown 타입
+
+1. any
+특정 변수의 타입을 확실히 모를 때 사용.
+any 타입 : 모든, 누구나 라는 뜻의 any 에서 유추할 수 있듯이 any 타입은 어떤 타입이든지 이 변수에 넣을 수 있다.
+마치 자바스크립트 변수 쓰듯이 사용한다.
+any 타입은 변수에 지정할 경우 모든 타입의 값을 다 할당받을 수 있다. 반대로 모든 타입의 변수에 다 any 타입의 값을 집어넣을 수 있다.
+문자열이나 숫자형 전용 함수도 사용 가능하다.
+즉, 타입스크립트의 타입검사를 다 통과하는 치트키 같은 타입이라 생각하면 된다.
+
+- src/chapter6.ts
+// any
+let anyVar: any = 10; // 타입스크립트는 초기화하는 값을 기준으로 변수의 타입을 자동추론.
+anyVar = 'hello'; // string
+anyVar = true; // boolean
+anyVar = {}; // 객체
+anyVar = () => {}; // 함수
+
+anyVar.toUpperCase(); // 문자열 전용 함수
+anyVar.toFixed(); // 숫자형 전용 함수
+
+let num: number = 10;
+num = anyVar; // 타입오류 발생 안 함.
+
+tsx 명령어를 통해 실행해 본다.
+
+- Terminal
+tsx src/chapter6.ts
+    file:///D:/%EA%B0%9C%EB%B0%9C/%EC%9D%B8%ED%94%84%EB%9F%B0/%ED%95%9C%20%EC%9E%85%20%ED%81%AC%EA%B8%B0%EB%A1%9C%20%EC%9E%98%EB%9D%BC%EB%A8%B9%EB%8A%94%20%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8(TypeScript)/onebite-typescript/section2/src/chapter6.ts:1
+    var __defProp=Object.defineProperty;var __name=(target,value)=>__defProp(target,"name",{value,configurable:true});let anyVar=10;anyVar="hello";anyVar=true;anyVar={};anyVar=__name(()=>{},"anyVar");anyVar.toUpperCase();anyVar.toFixed();let num=10;num=anyVar;     
+                                                                                                                                                                                                            ^
+
+    TypeError: anyVar.toUpperCase is not a function
+        at <anonymous> (d:\%EA%B0%9C%EB%B0%9C\%EC%9D%B8%ED%94%84%EB%9F%B0\%ED%95%9C %EC%9E%85 %ED%81%AC%EA%B8%B0%EB%A1%9C %EC%9E%98%EB%9D%BC%EB%A8%B9%EB%8A%94 %ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8(TypeScript)\onebite-typescript\section2\src\chapter6.ts:8:8)
+        at ModuleJob.run (node:internal/modules/esm/module_job:218:25)
+        at async ModuleLoader.import (node:internal/modules/esm/loader:329:24)
+        at async loadESM (node:internal/process/esm_loader:34:7)
+        at async handleMainPromise (node:internal/modules/run_main:113:12)
+
+    Node.js v20.10.0
+
+함수에서 toUpperCase() 메서드를 호출하려고 하니 오류 발생. 런타임 오류가 발생한다.
+any 타입은 타입 검사를 안하는 것과 같기 때문에, 타입스크립트가 가진 이점을 포기한다는 것과 다를게 없다.
+따라서 가급적 any 타입은 사용하지 않는 것을 권장한다.
+
+2. unknown
+any 타입과 마찬가지로 아무 타입의 값을 다 집어넣을 수 있다.
+하지만 모든 타입의 변수에 unknown 타입을 값을 집어넣을 수 없다.
+또한 toUpperCase() 메서드나 toFixed() 같은 문자열이나 숫자형 전용 함수도 사용 불가능하다.
+또한 사칙연산도 쓸 수 없다.
+
+unknown 타입을 사용하려면 typeof 연산자를 이용해 지정한 타입을 검사하여 지정한 타입으로 정제하여 사용 가능하다.
+
+- src/chapter6.ts
+...
+// unknown
+let unknownVar: unknown;
+unknownVar = '';
+unknownVar = 1;
+unknownVar = () => {};
+
+// unknownVar.toUpperCase(); // 오류
+
+// unknown 타입 활용
+// 타입 정제, 타입 좁히기
+if (typeof unknownVar === 'number') {
+    num = unknownVar;
+}
+
+변수에 저장할 값의 타입이 확실하지 않을 때 any 타입보다 조금 더 안전한 unknown 타입을 활용하는게 좋다.
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
