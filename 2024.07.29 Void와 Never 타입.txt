@@ -1,0 +1,74 @@
+[2024.07.29 Void와 Never 타입]
+
+한 입 크기로 잘라먹는 타입스크립트 - Void 타입과 Never 타입
+
+1. void
+void 가 공허하다는 뜻이 있듯이, 아무것도 없음을 의미하는 타입이다.
+
+- src/chapter7.ts
+// void
+// 타입스크립트는 함수에서 반환되는 값도 타입 설정 가능
+function func1(): string {
+    return 'hello';
+}
+
+// 아무 것도 반환하지 않을 때 void
+function func2(): void {
+    console.log('hello');
+}
+
+// 변수의 타입이 void 일 때 어떠한 값도 담을 수 없다.
+// 오직 undefined 만 담을 수 있다.
+let a: void;
+// a = 1;
+// a = 'hello';
+// a = {};
+a = undefined;
+// a = null; // tsconfig.json 파일에서 "strictNullChecks": false 설정시 null 도 집어넣을 수 있다.
+
+// 굳이 반환값이 없는 함수에 void를 명시하는 이유는, undefined 로 타입 설정시 오류 발생하기 때문.
+function func3(): undefined {
+    console.log('hello');
+    // 아래 둘 중 하나를 반환해야 한다.
+    return undefined;
+    // return;
+}
+
+// null 을 명시하면 null 을 반환해야 한다.
+function func4(): null {
+    console.log('hello');
+    return null;
+}
+
+return 문을 사용하기 싫은 함수의 반환값 타입은 void 로 설정한다.
+
+2. never
+존재하지 않는, 즉 불가능한 타입.
+
+- src/chapter7.ts
+...
+// never
+// 무한루프 함수 : 반환할 수 없는, 정상적으로 종료되지 않는 함수
+// 이 함수의 반환값이 있는게 모순이다 하는 경우에 사용
+function func5(): never {
+    while (true) {}
+}
+
+// 프로그램 실행 도중 애러 던짐
+// 실행되면 프로그램 종료
+function func6(): never {
+    throw new Error();
+}
+
+// 변수의 타입이 never 일 때 어떠한 값도 담을 수 없다.
+let b: never;
+// b = 1;
+// b = {};
+// b = '';
+// b = undefined;
+// b = null; // tsconfig.json 파일에서 "strictNullChecks": false 설정해도 집어넣을 수 없다.
+let anyVar: any;
+// b = anyVar; // 심지어 any 타입도 넣을 수 없다.
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
