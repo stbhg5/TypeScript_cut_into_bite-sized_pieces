@@ -22,4 +22,5 @@
     <a href="https://stbhg5.tistory.com/381">타입 별칭과 인덱스 시그니처</a><br/>
     <a href="https://stbhg5.tistory.com/382">Enum 타입</a><br/>
     <a href="https://stbhg5.tistory.com/383">Any와 Unknown</a><br/>
+    <a href="https://stbhg5.tistory.com/384">Void와 Never 타입</a><br/>
 
