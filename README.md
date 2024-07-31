@@ -27,3 +27,4 @@
 
 <p>섹션 3. 타입스크립트 이해하기<p/>
     <a href="https://stbhg5.tistory.com/385">타입스크립트 이해하기</a><br/>
+    <a href="https://stbhg5.tistory.com/386">타입은 집합이다</a><br/>
