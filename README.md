@@ -29,3 +29,4 @@
     <a href="https://stbhg5.tistory.com/385">타입스크립트 이해하기</a><br/>
     <a href="https://stbhg5.tistory.com/386">타입은 집합이다</a><br/>
     <a href="https://stbhg5.tistory.com/387">타입 계층도와 함께 기본타입 살펴보기</a><br/>
+    <a href="https://stbhg5.tistory.com/388">객체 타입의 호환성</a><br/>
