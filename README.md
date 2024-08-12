@@ -31,3 +31,4 @@
     <a href="https://stbhg5.tistory.com/387">타입 계층도와 함께 기본타입 살펴보기</a><br/>
     <a href="https://stbhg5.tistory.com/388">객체 타입의 호환성</a><br/>
     <a href="https://stbhg5.tistory.com/389">대수 타입</a><br/>
+    <a href="https://stbhg5.tistory.com/390">타입 추론</a><br/>
