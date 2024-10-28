@@ -32,3 +32,4 @@
     <a href="https://stbhg5.tistory.com/388">객체 타입의 호환성</a><br/>
     <a href="https://stbhg5.tistory.com/389">대수 타입</a><br/>
     <a href="https://stbhg5.tistory.com/390">타입 추론</a><br/>
+    <a href="https://stbhg5.tistory.com/391">타입 단언</a><br/>
