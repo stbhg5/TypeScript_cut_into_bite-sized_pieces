@@ -1,0 +1,231 @@
+[2024.10.30 서로소 유니온 타입]
+
+한 입 크기로 잘라먹는 타입스크립트 - 서로소 유니온 타입
+
+1. 서로소 유니온 타입
+교집합이 없는 타입들로만 만든 유니온 타입.
+ex) string | number
+
+- src/chapter8.ts
+/**
+ * 서로소 유니온 타입
+ */
+type Admin = {
+    name: string;
+    kickCount: number;
+};
+
+type Member = {
+    name: string;
+    point: number;
+};
+
+type Guest = {
+    name: string;
+    visitCount: number;
+};
+
+// Union 타입
+type User = Admin | Member | Guest;
+
+// 로그인 함수
+// Admin -> {name}님 현재까지 {kickCount}명 강퇴했습니다.
+// Member -> {name}님 현재까지 {point} 모았습니다.
+// Guest -> {name}님 현재까지 {visitCount}번 오셨습니다.
+function login(user: User) {
+    // in 연산자 활용한 타입 가드
+    if ('kickCount' in user) {
+        // user; // Admin 타입
+        console.log(`${user.name}님 현재까지 ${user.kickCount}명 강퇴했습니다.`);
+    } else if ('point' in user) {
+        // user; // Member 타입
+        console.log(`${user.name}님 현재까지 ${user.point} 모았습니다.`);
+    } else {
+        // user; // Guest 타입
+        console.log(`${user.name}님 현재까지 ${user.visitCount}번 오셨습니다.`);
+    }
+}
+
+하지만 위의 내용은 직관적이지가 않아, 다른 사용자가 보면 혼동할 수가 있다.
+이 때 서로소 유니온 타입을 활용한다.
+string 리터럴 타입끼리는 교집합이 없는 공집합인 점을 활용한다.
+
+- src/chapter8.ts
+/**
+ * 서로소 유니온 타입
+ */
+type Admin = {
+    tag: 'ADMIN'; // string 리터럴 타입
+    name: string;
+    kickCount: number;
+};
+
+type Member = {
+    tag: 'MEMBER'; // string 리터럴 타입
+    name: string;
+    point: number;
+};
+
+type Guest = {
+    tag: 'GUEST'; // string 리터럴 타입
+    name: string;
+    visitCount: number;
+};
+
+// 서로소 Union 타입
+type User = Admin | Member | Guest;
+
+// 로그인 함수
+// 서로소 유니온 타입 : 직관적
+function login(user: User) {
+    switch (user.tag) {
+        case 'ADMIN': { // ADMIN 타입으로 좁혀짐
+            console.log(`${user.name}님 현재까지 ${user.kickCount}명 강퇴했습니다.`);
+            break;
+        }
+        case 'MEMBER': { // MEMBER 타입으로 좁혀짐
+            console.log(`${user.name}님 현재까지 ${user.point} 모았습니다.`);
+            break;
+        }
+        case 'GUEST': { // GUEST 타입으로 좁혀짐
+            console.log(`${user.name}님 현재까지 ${user.visitCount}번 오셨습니다.`);
+            break;
+        }
+    }
+    /*
+    if (user.tag === 'ADMIN') {
+        console.log(`${user.name}님 현재까지 ${user.kickCount}명 강퇴했습니다.`);
+    } else if (user.tag === 'MEMBER') {
+        console.log(`${user.name}님 현재까지 ${user.point} 모았습니다.`);
+    } else {
+        console.log(`${user.name}님 현재까지 ${user.visitCount}번 오셨습니다.`);
+    }
+    */
+}
+
+서로소 유니온 타입을 사용하면 좋은점을 복습겸 한가지 더 사례를 살펴본다.
+
+- src/chapter8.ts
+...
+// 복습겸 한가지 더 사례
+// 비동기 작업의 결과를 처리하는 객체
+type AsyncTask = {
+    state: 'LOADING' | 'FAILED' | 'SUCCESS';
+    // state 가 'LOADING' 일 때를 대비해 선택적 프로퍼티로 만듦
+    error?: {
+        message: string;
+    };
+    response?: {
+        data: string;
+    };
+};
+
+// 비동기 작업 처리 결과를 매개변수로 받아 상태에 따라 처리
+// 로딩 중 -> 콘솔에 로딩중 출력
+// 실패 -> 실패 : 에러메시지를 출력
+// 성공 -> 성공 : 데이터를 출력
+function processResult(task: AsyncTask) {
+    switch (task.state) {
+        case 'LOADING': {
+            console.log();
+            break;
+        }
+        case 'FAILED': {
+            console.log(`에러 발생 : ${task.error?.message}`);
+            break;
+        }
+        case 'SUCCESS': {
+            console.log(`성공 : ${task.response!.data}`);
+            break;
+        }
+    }
+}
+
+const loading: AsyncTask = {
+    state: 'LOADING'
+};
+
+const failed: AsyncTask = {
+    state: 'FAILED'
+  , error: {
+        message: '오류 발생 원인은 ~~'
+    }
+};
+
+const success: AsyncTask = {
+    state: 'SUCCESS'
+  , response: {
+        data: '데이터 ~~'
+    }
+};
+
+processResult() 함수 안에서 옵셔널 체이닝을 지우면 에러가 발생하는데, 선택적 프로퍼티이기 때문에 더 이상 좁혀질 타입이 없기 때문이다.
+따라서 옵셔널 체이닝 또는 타입 non null 단언을 사용해야 하나, 이 방법은 안전하지 않다.
+이 때 AsyncTask 를 3개의 타입으로 분리하여 서로소 유니온 타입으로 만든다.
+
+- src/chapter8.ts
+...
+// 복습겸 한가지 더 사례
+type LoadingTask = {
+    state: 'LOADING'
+};
+
+type FailedTask = {
+    state: 'FAILED';
+    error: {
+        message: string;
+    }
+};
+
+type SuccessTask = {
+    state: 'SUCCESS';
+    response: {
+        data: string;
+    }
+};
+
+// 서로소 유니온 타입
+type AsyncTask = LoadingTask | FailedTask | SuccessTask;
+
+// 비동기 작업 처리 결과를 매개변수로 받아 상태에 따라 처리
+function processResult(task: AsyncTask) {
+    switch (task.state) {
+        case 'LOADING': {
+            console.log();
+            break;
+        }
+        case 'FAILED': {
+            console.log(`에러 발생 : ${task.error.message}`);
+            break;
+        }
+        case 'SUCCESS': {
+            console.log(`성공 : ${task.response.data}`);
+            break;
+        }
+    }
+}
+
+const loading: AsyncTask = {
+    state: 'LOADING'
+};
+
+const failed: AsyncTask = {
+    state: 'FAILED'
+  , error: {
+        message: '오류 발생 원인은 ~~'
+    }
+};
+
+const success: AsyncTask = {
+    state: 'SUCCESS'
+  , response: {
+        data: '데이터 ~~'
+    }
+};
+
+동시에 여러가지 상태를 표현해야 하는 객체의 타입을 정의할 때, 선택적 프로퍼티를 사용하는 것보다 서로소 유니온 타입으로 만들어주는게 좋다.
+그래야 switch case 문 같은 것을 이용했을 때 더 직관적으로 안전하게 타입을 좁혀서 코드를 만들 수 있기 때문이다.
+또한 서로소 유니온 타입은 tag 를 붙여 객체를 완벽히 구별해줄 수 있는 기능이기 때문에 tagged 유니온 타입 이라고도 부른다.
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
