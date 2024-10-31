@@ -35,3 +35,6 @@
     <a href="https://stbhg5.tistory.com/391">타입 단언</a><br/>
     <a href="https://stbhg5.tistory.com/392">타입 좁히기</a><br/>
     <a href="https://stbhg5.tistory.com/393">서로소 유니온 타입</a><br/>
+
+<p>섹션 4. 함수와 타입<p/>
+    <a href="https://stbhg5.tistory.com/394">함수 타입</a><br/>
