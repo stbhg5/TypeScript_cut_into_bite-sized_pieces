@@ -35,6 +35,7 @@
     <a href="https://stbhg5.tistory.com/391">타입 단언</a><br/>
     <a href="https://stbhg5.tistory.com/392">타입 좁히기</a><br/>
     <a href="https://stbhg5.tistory.com/393">서로소 유니온 타입</a><br/>
+    <br/>
 
 <p>섹션 4. 함수와 타입<p/>
     <a href="https://stbhg5.tistory.com/394">함수 타입</a><br/>
@@ -42,6 +43,7 @@
     <a href="https://stbhg5.tistory.com/396">함수 타입의 호환성</a><br/>
     <a href="https://stbhg5.tistory.com/397">함수 오버로딩</a><br/>
     <a href="https://stbhg5.tistory.com/398">사용자 정의 타입 가드</a><br/>
+    <br/>
 
 <p>섹션 5. 인터페이스<p/>
     <a href="https://stbhg5.tistory.com/399">인터페이스</a><br/>
