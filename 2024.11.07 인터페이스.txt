@@ -1,0 +1,134 @@
+[2024.11.07 인터페이스]
+
+(섹션 5. 인터페이스)
+
+한 입 크기로 잘라먹는 타입스크립트 - 인터페이스
+
+section5 폴더를 생성한 뒤, section4 폴더에서 사용했던 package-lock.json, package.json, tsconfig.json 파일을 복사하여 section5 폴더에 붙여넣는다.
+이후 package.json 파일에서 'name' 부분 값을 'section5' 로 수정한다.
+
+- package.json
+{
+  "name": "section5",
+  ...
+}
+
+이후 터미널에서 'npm i' 명령어를 입력하여 package.json 의 'dependencies' 에 명시된 외부 패키지들을 일괄적으로 설치한다.
+
+- Terminal
+npm i
+    added 2 packages, and audited 3 packages in 604ms
+
+    found 0 vulnerabilities
+
+이렇게 새로운 타입스크립트 프로젝트 세팅이 완료되었다.
+이후 src 폴더를 생성하여 index.ts 파일을 만들어 제대로 동작하는지 테스트한다.
+tsc 명령어를 이용하여 컴파일 후 컴파일된 자바스크립트 파일을 확인한다.
+
+- Terminal
+tsc
+
+- dist/index.js
+console.log('Hello TS');
+export {};
+
+컴파일 결과를 node 로 실행하고 tsx 로 실행한다.
+
+- Terminal
+node dist/index.js
+    Hello TS
+
+tsx src/index.ts
+    Hello TS
+
+타입스크립트 패키지 초기설정을 완료했다.
+src 폴더에 chapter0.ts 를 생성한다.
+만약 tsconfig.json 에서 빨간불이 들어온다면, Ctrl + S 를 눌러 저장한다.
+
+
+1. 인터페이스
+타입에 이름을 지어주는 또 다른 문법.
++ 객체의 구조를 정의하는데 특화된 문법(상속, 합침 등의 특수한 기능을 제공함)
+인터페이스 : 우리말로 상호간에 약속된 규칙.
+
+- chapter0.ts
+/**
+ * 인터페이스
+ */
+interface Person {
+    name: string;
+    age: number;
+}
+
+const person: Person = {
+    name: '송진성'
+  , age: 31
+};
+
+타입 별칭과 타입을 정의하는 문법들만 좀 다를뿐 기본적인 기능은 같다.
+
+- chapter0.ts
+/**
+ * 인터페이스
+ */
+interface Person {
+    readonly name: string; // 읽기전용 프로퍼티 설정 가능
+    age?: number; // 선택적 프로퍼티 설정 가능
+    // sayHi: () => void; // 메서드 타입 정의 가능
+    // sayHi: (a: number, b: number) => void;
+    sayHi(): void; // 호출 시그니처 이용 가능
+    sayHi(a: number, b: number): void; // 오버로드 시그니처 (호출 시그니처 사용 권장)
+}
+
+// 타입 별칭
+/*
+type Func = {
+    (): void; // 호출 시그니처
+};
+const func: Func = () => {};
+*/
+
+const person: Person = {
+    name: '송진성'
+  , sayHi: function () {
+        console.log('Hi');
+    }
+};
+
+// person.name = '홍길동'; // 오류
+person.sayHi();
+person.sayHi(1, 2);
+
+/**
+ * 인터페이스와 타입 별칭과의 차이점
+ * 타입 별칭은 유니온 타입, 인터섹션 타입 만들 수 있지만, 인터페이스는 불가능
+ */
+type Type1 = number | string; // 유니온 타입
+type Type2 = number & string; // 인터섹션 타입
+
+interface Test {
+    test: string;
+} // | number / & number 불가능
+
+// 인터페이스와 유니온/인터섹션 타입 활용하려면...
+// 타입 별칭에 인터페이스를 넣어 활용 가능
+type Type3 = number | string | Test; // 유니온 타입
+type Type4 = number & string & Test; // 인터섹션 타입
+
+// 인터페이스 타입 주석에 사용 가능
+const test1: Test | number = {
+    test: '123'
+};
+
+/**
+ * 인터페이스 선언시 변수명
+ * 인터페이스 변수 선언시 I를 변수 앞에 붙이는 관습이 있다.
+ * 하지만 논란이 있는데, 대문자 I를 변수 앞에 붙이는 표기법을 헝가리안 표기법이라고 한다.
+ * 이런 표기법을 자바스크립트 프로그래밍에선 잘 안 쓴다.
+ * 주로 스네이크 표기법(user_name), 카멜 표기법(userName), 파스칼 표기법(UserName)을 쓴다.
+ * 팀의 환경에 따라 I를 변수 앞에 붙일지 안 붙일지 따라가면 된다.
+ */
+interface IPerson {}
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
