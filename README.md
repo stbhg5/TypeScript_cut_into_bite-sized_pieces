@@ -42,3 +42,6 @@
     <a href="https://stbhg5.tistory.com/396">함수 타입의 호환성</a><br/>
     <a href="https://stbhg5.tistory.com/397">함수 오버로딩</a><br/>
     <a href="https://stbhg5.tistory.com/398">사용자 정의 타입 가드</a><br/>
+
+<p>섹션 5. 인터페이스<p/>
+    <a href="https://stbhg5.tistory.com/399">인터페이스</a><br/>
