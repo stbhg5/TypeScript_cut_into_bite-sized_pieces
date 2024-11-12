@@ -47,3 +47,4 @@
 
 <p>섹션 5. 인터페이스<p/>
     <a href="https://stbhg5.tistory.com/399">인터페이스</a><br/>
+    <a href="https://stbhg5.tistory.com/400">인터페이스 확장하기</a><br/>
