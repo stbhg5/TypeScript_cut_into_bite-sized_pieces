@@ -1,0 +1,59 @@
+[2024.11.13 인터페이스 합치기]
+
+한 입 크기로 잘라먹는 타입스크립트 - 인터페이스 합치기
+
+1. 인터페이스 선언 합침
+선언 합침(declaration merging) : 동일한 이름으로 정의한 인터페이스는 다 합쳐짐.
+주로 라이브러리의 모듈을 보강할 때 사용.
+
+- chapter2.ts
+/**
+ * 선언 합침
+ */
+// 타입 별칭 2번 정의시 오류
+type typePerson = {
+    name: string;
+}
+type typePerson = {
+    age: number;
+}
+
+// 인터페이스 2번 정의시 오류X
+// 동일한 이름으로 정의한 인터페이스는 다 합쳐지기 때문
+interface Person {
+    name: string;
+}
+interface Person {
+    // name: number; // 다른 타입 (충돌) - 선언 합침에선 허용X
+    // name: 'test'; // 서브 타입 (충돌) - 선언 합침에선 허용X
+    name: string; // 반드시 동일한 타입 - 같은 프로퍼티 중복 정의시 타입도 같아야 함
+    age: number;
+}
+interface Developer extends Person { // 확장
+    name: 'hello'; // 서브 타입 프로퍼티 허용
+}
+
+const person: Person = {
+    name: 'js'
+  , age: 31
+};
+
+/**
+ * 모듈 보강
+ */
+interface Lib {
+    a: number;
+    b: number;
+}
+interface Lib {
+    c: string;
+}
+
+const lib: Lib = {
+    a: 1
+  , b: 2
+  , c: 'hello'
+};
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
