@@ -1,0 +1,305 @@
+[2024.11.17 자바스크립트의 클래스 소개]
+
+(섹션 6. 클래스)
+
+한 입 크기로 잘라먹는 타입스크립트 - 자바스크립트의 클래스 소개
+
+* 실습 환경설정
+section6 폴더를 생성한 뒤, section5 폴더에서 사용했던 package-lock.json, package.json, tsconfig.json 파일을 복사하여 section6 폴더에 붙여넣는다.
+이후 package.json 파일에서 'name' 부분 값을 'section6' 로 수정한다.
+
+- package.json
+{
+  "name": "section6",
+  ...
+}
+
+이후 터미널에서 'npm i' 명령어를 입력하여 package.json 의 'dependencies' 에 명시된 외부 패키지들을 일괄적으로 설치한다.
+
+- Terminal
+npm i
+    added 2 packages, and audited 3 packages in 738ms
+
+    found 0 vulnerabilities
+    npm notice
+    npm notice New minor version of npm available! 10.2.3 -> 10.9.0
+    npm notice Changelog: https://github.com/npm/cli/releases/tag/v10.9.0
+    npm notice Run npm install -g npm@10.9.0 to update!
+    npm notice
+
+이렇게 새로운 타입스크립트 프로젝트 세팅이 완료되었다.
+이후 src 폴더를 생성하여 index.ts 파일을 만들어 제대로 동작하는지 테스트한다.
+tsc 명령어를 이용하여 컴파일 후 컴파일된 자바스크립트 파일을 확인한다.
+
+- index.ts
+console.log('Hello TS');
+
+- Terminal
+tsc
+
+- dist/index.js
+console.log('Hello TS');
+export {};
+
+컴파일 결과를 node 로 실행하고 tsx 로 실행한다.
+
+- Terminal
+node dist/index.js
+    Hello TS
+
+tsx src/index.ts
+    Hello TS
+
+타입스크립트 패키지 초기설정을 완료했다.
+실습 환경설정을 완료하였다.
+
+
+1. 자바스크립트 클래스
+src 폴더에 chapter0.js 파일을 생성한다.
+tsconfig.json 파일에 오류가 발생하는 것을 확인할 수 있다. (index.ts 파일을 삭제하지 않고 함께 두면 오류가 발생하지 않을 수도 있지만, 삭제했다고 가정하고 오류가 발생했다고 진행)
+오류 발생 원인은 "include" 옵선에 폴더 경로를 "src" 로 설정했기 때문에, src 폴더 내 모든 타입스크립트 파일을 타입스크립트 컴파일러가 관제하고 있다.
+이 때 타입스크립트 파일이 아닌 자바스크립트 파일을 생성하면 모니터링중 잘 못된 것 아니냐고 오류를 보여준다.
+자바스크립트 파일도 허용하라는 옵션인 "allowJs" 를 추가한다. 그러면 자바스크립트 파일도 허용이 된다.
+
+- tsconfig.json
+{
+    "compilerOptions": {
+        "target": "ESNext"
+      , "module": "ESNext"
+      , "outDir": "dist"
+      , "strict": true
+      , "moduleDetection": "force"
+      , "skipLibCheck": true // 추가
+      , "allowJs": true
+    }
+  , "include": ["src"]
+  , "ts-node": {
+        "esm": true
+    }
+}
+
+자바스크립트에서 동일한 형식 동일한 모양의 객체를 여러개 만들어야 한다면, 어쩔 수 없이 중복코드가 발생한다.
+
+- chapter0.js
+/**
+ * 클래스
+ */
+// 학생A
+let studentA = {
+    name: '송진성'
+  , grade: 'A+'
+  , age: 31
+  , study() {
+        console.log('열심히 공부 함');
+    }
+  , introduce() {
+        console.log('안녕하세요!');
+    }
+}
+
+// 학생B
+let studentB = {
+    name: '홍길동'
+  , grade: 'B-'
+  , age: 32
+  , study() {
+        console.log('열심히 공부 함');
+    }
+  , introduce() {
+        console.log('안녕하세요!');
+    }
+}
+
+이 때 자바스크립트의 클래스를 이용하면 좋은데, 클래스는 똑같은 모양의 객체를 마치 공장에서 찍어내듯이 단 1줄로 간단하게 만들도록 도와주는 좋은 문법이다.
+쉽게 말하면 객체를 만들어내는 틀이다. 객체가 붕어빵이면, 클래스는 붕어빵 기계로 비유할 수 있다.
+
+- chapter0.js
+...
+// 클래스
+class Student {
+    // 필드 : 클래스가 만들어낼 객체의 프로퍼티 / 어떤 모양의 객체를 만들지 필드에 정의
+    name;
+    grade;
+    age;
+
+    // 생성자 : 클래스를 호출하면 실제로 객체를 생성하는 역할을 하는 함수
+    constructor(name, grade, age) {
+        // this : 현재 클래스가 만들고 있는 객체
+        this.name = name;
+        this.grade = grade;
+        this.age = age;
+    }
+}
+
+// 클래스를 이용한 객체 생성
+// 클래스를 이용해서 만든 객체 -> 인스턴스
+// Student 인스턴스
+let studentB = new Student('송진성', 'A+', 31); // new 라는 키워드를 붙이고, 클래스 이름을 적고 소괄호 안에 매개변수 전달
+console.log(studentB);
+
+클래스 생성시 변수의 맨 앞 문자를 대문자로 쓰는 파스칼 표기법을 주로 사용한다.
+생성한 클래스를 출력해본다.
+터미널에서 node 명령어를 이용한다.
+
+- Terminal
+node src/chapter0.js
+    Student { name: '송진성', grade: 'A+', age: 31 }
+
+클래스의 프로퍼티와 값이 잘 출력되는 것을 확인할 수 있다.
+클래스에 메서드도 만들어보도록 한다.
+
+- chapter0.js
+// 클래스
+class Student {
+    // 필드 : 클래스가 만들어낼 객체의 프로퍼티 / 어떤 모양의 객체를 만들지 필드에 정의
+    name;
+    grade;
+    age;
+
+    // 생성자 : 클래스를 호출하면 실제로 객체를 생성하는 역할을 하는 함수
+    constructor(name, grade, age) {
+        // this : 현재 클래스가 만들고 있는 객체
+        this.name = name;
+        this.grade = grade;
+        this.age = age;
+    }
+
+    // 메서드
+    study() { console.log('열심히 공부 함'); }
+    introduce() { console.log('안녕하세요!'); }
+}
+
+// 클래스를 이용한 객체 생성
+// 클래스를 이용해서 만든 객체 -> 인스턴스
+// Student 인스턴스
+let studentB = new Student('송진성', 'A+', 31); // new 라는 키워드를 붙이고, 클래스 이름을 적고 소괄호 안에 매개변수 전달
+console.log(studentB);
+studentB.study();
+studentB.introduce();
+
+터미널에서 node 명령어를 이용하여 메서드가 잘 실행되었는지 확인한다.
+
+- Terminal
+node src/chapter0.js
+    Student { name: '송진성', grade: 'A+', age: 31 }
+    열심히 공부 함
+    안녕하세요!
+
+객체에서는 각각의 프로퍼티를 콤마(,)로 구분했지만, 클래스에서는 필드는 세미콜론(;), 메서드는 중괄호를 열었다 닫는 것으로 선언한다.
+this 를 메서드 안에서 이용하면, 현재 객체의 프로퍼티의 값들을 가져와 활용할 수 있다.
+
+- chapter0.js
+// 클래스
+class Student {
+    // 필드 : 클래스가 만들어낼 객체의 프로퍼티 / 어떤 모양의 객체를 만들지 필드에 정의
+    name;
+    grade;
+    age;
+
+    // 생성자 : 클래스를 호출하면 실제로 객체를 생성하는 역할을 하는 함수
+    constructor(name, grade, age) {
+        // this : 현재 클래스가 만들고 있는 객체
+        this.name = name;
+        this.grade = grade;
+        this.age = age;
+    }
+
+    // 메서드
+    study() { console.log('열심히 공부 함'); }
+    introduce() { console.log(`안녕하세요 ${this.name} 입니다!`); }
+}
+
+// 클래스를 이용한 객체 생성
+// 클래스를 이용해서 만든 객체 -> 인스턴스
+// Student 인스턴스
+let studentB = new Student('송진성', 'A+', 31); // new 라는 키워드를 붙이고, 클래스 이름을 적고 소괄호 안에 매개변수 전달
+console.log(studentB);
+studentB.study();
+studentB.introduce();
+
+- Terminal
+node src/chapter0.js
+    Student { name: '송진성', grade: 'A+', age: 31 }
+    열심히 공부 함
+    안녕하세요 송진성 입니다!
+
+새로운 StudentDeveloper 클래스를 생성한 후 실행한다.
+
+- chapter0.js
+...
+// StudentDeveloper 클래스
+class StudentDeveloper {
+    // 필드
+    name;
+    grade;
+    age;
+    favoriteSkill;
+
+    // 생성자
+    constructor(name, grade, age, favoriteSkill) { // 프로퍼티에 값 설정
+        this.name = name;
+        this.grade = grade;
+        this.age = age;
+        this.favoriteSkill = favoriteSkill;
+    }
+
+    // 메서드
+    study() { console.log('열심히 공부 함'); }
+    introduce() { console.log(`안녕하세요 ${this.name} 입니다!`); }
+    programming() { console.log(`${this.favoriteSkill}로 프로그래밍 함`); }
+}
+
+const studentDeveloper = new StudentDeveloper('송진성', 'B+', 31, 'TypeScript');
+console.log(studentDeveloper);
+studentDeveloper.programming();
+
+- Terminal
+node src/chapter0.js
+    StudentDeveloper {
+        name: '송진성',
+        grade: 'B+',
+        age: 31,
+        favoriteSkill: 'TypeScript'
+    }
+    TypeScript로 프로그래밍 함
+
+여기서 문제를 하나 발견한다면, Student 클래스와 StudentDeveloper 클래스가 너무 심할 정도로 비슷하다.
+StudentDeveloper 클래스처럼 Student 클래스의 파생 클래스들이 계속 생성되어야 한다면, 상속 기능을 활용한다.
+
+- chapter0.js
+...
+// StudentDeveloper 클래스
+class StudentDeveloper extends Student {
+    // 필드
+    favoriteSkill;
+
+    // 생성자
+    constructor(name, grade, age, favoriteSkill) { // 프로퍼티에 값 설정
+        super(name, grade, age); // 부모클래스 생성자 호출
+        this.favoriteSkill = favoriteSkill;
+    }
+
+    // 메서드
+    programming() { console.log(`${this.favoriteSkill}로 프로그래밍 함`); }
+}
+
+const studentDeveloper = new StudentDeveloper('송진성', 'B+', 31, 'TypeScript');
+console.log(studentDeveloper);
+studentDeveloper.programming();
+
+- Terminal
+node src/chapter0.js
+    StudentDeveloper {
+        name: '송진성',
+        grade: 'B+',
+        age: 31,
+        favoriteSkill: 'TypeScript'
+    }
+    TypeScript로 프로그래밍 함
+
+이전과 똑같이 클래스의 인스턴스가 잘 생성되는 것을 확인할 수 있다.
+
+
+참고링크 : https://ts.winterlood.com/f9862331-98d2-4afc-a8f7-f9f1d6cf3d43
+참고링크 : https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Classes
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
