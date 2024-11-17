@@ -49,3 +49,8 @@
     <a href="https://stbhg5.tistory.com/399">인터페이스</a><br/>
     <a href="https://stbhg5.tistory.com/400">인터페이스 확장하기</a><br/>
     <a href="https://stbhg5.tistory.com/401">인터페이스 합치기</a><br/>
+    <br/>
+
+<p>섹션 6. 클래스<p/>
+    <a href="https://stbhg5.tistory.com/402">자바스크립트의 클래스 소개</a><br/>
+    <br/>
