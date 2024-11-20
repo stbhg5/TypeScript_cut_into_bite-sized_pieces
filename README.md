@@ -55,4 +55,5 @@
     <a href="https://stbhg5.tistory.com/402">자바스크립트의 클래스 소개</a><br/>
     <a href="https://stbhg5.tistory.com/403">타입스크립트의 클래스</a><br/>
     <a href="https://stbhg5.tistory.com/404">접근 제어자</a><br/>
+    <a href="https://stbhg5.tistory.com/405">인터페이스와 클래스</a><br/>
     <br/>
