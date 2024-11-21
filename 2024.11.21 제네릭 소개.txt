@@ -1,0 +1,95 @@
+[2024.11.21 제네릭 소개]
+
+(섹션 7. 제네릭)
+
+한 입 크기로 잘라먹는 타입스크립트 - 제네릭 소개
+
+* 실습 환경설정
+section7 폴더를 생성한 뒤, section6 폴더에서 사용했던 package-lock.json, package.json, tsconfig.json 파일을 복사하여 section7 폴더에 붙여넣는다.
+이후 package.json 파일에서 'name' 부분 값을 'section7' 로 수정한다.
+
+- package.json
+{
+  "name": "section7",
+  ...
+}
+
+이후 터미널에서 'npm i' 명령어를 입력하여 package.json 의 'dependencies' 에 명시된 외부 패키지들을 일괄적으로 설치한다.
+
+- Terminal
+npm i
+    added 2 packages, and audited 3 packages in 721ms
+
+    found 0 vulnerabilities
+
+이렇게 새로운 타입스크립트 프로젝트 세팅이 완료되었다.
+이후 src 폴더를 생성하여 index.ts 파일을 만들어 제대로 동작하는지 테스트한다.
+tsc 명령어를 이용하여 컴파일 후 컴파일된 자바스크립트 파일을 확인한다.
+
+- index.ts
+console.log('Hello TS');
+
+- dist/index.js
+console.log('Hello TS');
+export {};
+
+컴파일 결과를 node 로 실행하고 tsx 로 실행한다.
+
+- Terminal
+node dist/index.js
+    Hello TS
+
+tsx src/index.ts
+    Hello TS
+
+타입스크립트 패키지 초기설정을 완료했다.
+실습 환경설정을 완료하였다.
+
+
+1. 제네릭
+제네릭 : 일반적인, 포괄적인
+제네릭 함수 : 타입 변수와 함께 여러 타입의 값을 인수로 받아서 범용적으로 쓸 수 있는 함수.
+(일반적인 함수, 포괄적인 함수, 즉 모든 타입에 두루두루 쓸 수 있는 범용적인 함수)
+ex) 종합병원 (general hospital) : 모든 병을 두루두루 다 다룬다.
+함수 선언법은, 함수명 뒤에 꺽쇠 안에 타입변수를 선언하고, 매개변수 타입을 타입변수로 지정하고, 반환값의 타입도 타입변수로 지정한다.
+타입 변수는 자바스크립트의 변수처럼 상황에 따라 다른 타입을 넣을 수 있다.
+
+- chapter0.ts
+/**
+ * 제네릭
+ */
+// function func(value: string) {
+// function func(value: any) {
+function func(value: unknown) {
+    return value;
+}
+
+let num = func(10);
+// num.toUpperCase(); // any 타입일 때, 문자열 메서드 사용해도 오류 발생 X / unknown 타입일 때, 오류 발생
+// num.toFixed(); // unknown 타입일 때, 오류 발생 (unknown 타입은 전체집합)
+// unknown 타입일 때, 타입을 좁혀서 사용 가능
+if (typeof num === 'number') {
+    num.toFixed();
+}
+let bool = func(true);
+let str = func('string');
+
+// 제네릭 함수로 만들어, 함수의 인수에 따라서 반환값의 타입을 가변적으로 정해줄 수 있다.
+// 제네릭 함수
+function genericFunc<T>(value: T): T {
+    return value;
+}
+
+// 함수 호출할 때마다 인수에 따라 타입 변수의 타입이 결정
+let num2 = genericFunc(10); // number 로 추론
+let bool2 = genericFunc(true); // boolean 으로 추론
+let str2 = genericFunc('string'); // string 으로 추론
+
+// 제네릭 함수 타입 변수에 할당되는 타입 명시적 추론
+let arr = genericFunc([1, 2, 3]); // number[] 로 추론
+let arr2 = genericFunc([1, 2, 3] as [number, number, number]); // 튜플타입으로 추론 : 타입 단언
+let arr3 = genericFunc<[number, number, number]>([1, 2, 3]); // 튜플타입으로 추론 : 함수명 뒤에 꺽쇠 안에 타입변수 타입 지정
+// let arr4 = genericFunc<[number, number, number]>([1, 2, 3, 4]); // 정의된 타입과 다른 타입의 값 넣으면 오류
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
