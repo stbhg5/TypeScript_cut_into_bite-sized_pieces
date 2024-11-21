@@ -57,3 +57,7 @@
     <a href="https://stbhg5.tistory.com/404">접근 제어자</a><br/>
     <a href="https://stbhg5.tistory.com/405">인터페이스와 클래스</a><br/>
     <br/>
+
+<p>섹션 7. 제네릭<p/>
+    <a href="https://stbhg5.tistory.com/406">제네릭 소개</a><br/>
+    <br/>
