@@ -60,4 +60,5 @@
 
 <p>섹션 7. 제네릭<p/>
     <a href="https://stbhg5.tistory.com/406">제네릭 소개</a><br/>
+    <a href="https://stbhg5.tistory.com/407">타입 변수 응용하기</a><br/>
     <br/>
