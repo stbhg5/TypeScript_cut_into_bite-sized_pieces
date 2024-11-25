@@ -1,0 +1,64 @@
+[2024.11.25 타입 변수 응용하기]
+
+한 입 크기로 잘라먹는 타입스크립트 - 타입 변수 응용하기
+
+
+1. 첫번째 사례
+타입변수 여러개 선언 가능.
+
+- chapter1.ts
+/**
+ * 첫번째 사례
+ */
+// function swap<T>(a: T, b: T) {
+function swap<T, U>(a: T, b: U) { // 타입변수 여러개 선언 가능
+    return [b, a];
+}
+
+// 구조분해할당으로 받음
+// const [a, b] = swap('1', 2); // 오류 : number 타입 인수가 string 타입 매개 변수 할당 불가
+const [a, b] = swap('1', 2); // 오류X
+
+
+2. 두번째 사례
+튜플 타입 안에 ...unknown[] 사용.
+(실습 전, tsconfig.json 의 "noImplicitAny" 속성 값을 true 로 수정)
+
+- chapter1.ts
+...
+/**
+ * 두번째 사례
+ */
+// 호출전 타입변수 T 타입을 unknown 으로 추론
+// function returnFirstValue<T>(data: T[]) {
+function returnFirstValue<T>(data: [T, ...unknown[]]) { // 튜플, T 외에 나머지 요소 타입은 몰라도 됨 : rest 파라미터 쓰듯 사용
+    return data[0];
+}
+
+// function func(...rest) {} // 자바스크립트 rest 파라미터
+
+let num = returnFirstValue([0, 1, 2]); // 0 : number
+// let str = returnFirstValue(['hello', 'mynameis']); // 'hello' : string
+let str = returnFirstValue([1, 'hello', 'mynameis']); // 1 : number
+
+
+3. 세번째 사례
+extends 키워드를 이용해 타입 변수에 조건을 달아서 제한.
+
+- chapter1.ts
+...
+/**
+ * 세번째 사례
+ */
+// length 프로퍼티 타입이 number 인 객체를 확장한 타입으로 제한
+function getLength<T extends { length: number }>(data: T) {
+    return data.length;
+}
+
+let var1 = getLength([1, 2, 3]); // 3
+let var2 = getLength('12345'); // 5
+let var3 = getLength({ length: 10 }); // 10
+// let var4 = getLength(10); // length 프로퍼티가 없어서 오류
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
