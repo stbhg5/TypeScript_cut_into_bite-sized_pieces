@@ -1,0 +1,174 @@
+[2024.11.28 제네릭 인터페이스 & 제네릭 타입 별칭]
+
+한 입 크기로 잘라먹는 타입스크립트 - 제네릭 인터페이스 & 제네릭 타입 별칭
+
+* 타입 변수 (타입스크립트 공식문서 명칭)
+= 타입 파라미터
+= 제네릭 타입 변수
+= 제네릭 타입 파라미터
+
+
+1. 제네릭 인터페이스
+제네릭 함수를 만들때와 동일하게 만든다.
+이때, 제네릭 인터페이스는 타입으로 변수에 정의할 때, 타입 변수에 타입을 직접 할당해야 한다.
+
+- chapter3.ts
+/**
+ * 제네릭 인터페이스
+ */
+interface KeyPair<K, V> {
+    key: K;
+    value: V; 
+}
+
+// 변수 선언1
+let keyPair: KeyPair<string, number> = {
+    key: 'key'
+  , value: 0
+};
+
+// 변수 선언2
+let keyPair2: KeyPair<boolean, string[]> = {
+    key: true
+  , value: ['1']
+};
+
+하나의 인터페이스로 다양한 타입의 객체를 표현할 수 있다.
+제네릭 인터페이스는 객체의 인덱스 시그니쳐 문법과 사용하면 굉장히 유연한 객체 타입을 만들 수 있다.
+
+- chapter3.ts
+...
+/**
+ * 인덱스 시그니쳐
+ */
+interface NumberMap {
+    [key: string]: number;
+}
+
+// 변수 선언1
+let numberMap1: NumberMap = {
+    key: -1231
+  , key2: 123123
+};
+
+// 제네릭 인터페이스와 인덱스 시그니쳐
+interface Map<V> {
+    [key: string]: V;
+}
+
+// string
+let stringMap: Map<string> = {
+    key: 'value'
+};
+
+// boolean
+let booleanMap: Map<boolean> = {
+    key: true
+};
+...
+
+
+2. 제네릭 타입 별칭
+제네릭 타입 별칭 또한 제네릭 인터페이스처럼 타입으로 변수에 정의할 때, 타입 변수에 타입을 직접 할당해야 한다.
+제네릭 인터페이스와 문법만 다를 뿐, 거의 비슷하다.
+
+- chapter3.ts
+...
+/**
+ * 제네릭 타입 별칭
+ */
+type Map2<V> = {
+    [key: string]: V;
+};
+
+let stringMap2: Map2<string> = {
+    key: 'hello'
+};
+...
+
+
+3. 제네릭 인터페이스의 활용 예시
+- chapter3.ts
+...
+/**
+ * 제네릭 인터페이스의 활용 예시
+ * -> 유저 관리 프로그램
+ * -> 유저 구분 : 학생 유저 / 개발자 유저
+ */
+interface Student {
+    type: 'student'
+  , school: string;
+}
+
+interface Developer {
+    type: 'developer'
+  , skill: string;
+}
+
+interface beforeUser {
+    name: string;
+    profile: Student | Developer; // 서로소 유니온
+}
+
+// 학생 유저만 가능한 기능
+function goToSchool(user: beforeUser) {
+    // 조건문을 이용한 타입 좁히기
+    if (user.profile.type !== 'student') { // 타입 가드
+        console.log('잘 못 오셨습니다.');
+        return;
+    }
+    const school = user.profile.school;
+    console.log(`${school}로 등교 완료`);
+}
+
+const developerUser: beforeUser = {
+    name: '송진성'
+  , profile: {
+        type: 'developer'
+      , skill: 'TypeScript'
+    }
+};
+
+const studentUser: beforeUser = {
+    name: '홍길동'
+  , profile: {
+        type: 'student'
+      , school: '연세대학교'
+    }
+};
+
+// 제네릭 인터페이스 사용시 더 깔끔하게 사용 가능
+interface User<T> {
+    name: string;
+    profile: T;
+}
+
+// 학생 유저만 가능한 기능 - 제네릭 인터페이스 사용
+function goToSchool2(user: User<Student>) {
+    // 조건문을 이용한 타입 좁히기 필요 없음
+    const school = user.profile.school;
+    console.log(`${school}로 등교 완료`);
+}
+
+const developerUser2: User<Developer> = {
+    name: '송진성'
+  , profile: {
+        type: 'developer'
+      , skill: 'TypeScript'
+    }
+};
+
+const studentUser2: User<Student> = {
+    name: '홍길동'
+  , profile: {
+        type: 'student'
+      , school: '연세대학교'
+    }
+};
+
+// goToSchool2(developerUser2); // 오류
+goToSchool2(studentUser2);
+...
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
