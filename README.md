@@ -63,4 +63,5 @@
     <a href="https://stbhg5.tistory.com/407">타입 변수 응용하기</a><br/>
     <a href="https://stbhg5.tistory.com/408">map, forEach 메서드 타입 정의하기</a><br/>
     <a href="https://stbhg5.tistory.com/409">제네릭 인터페이스 & 제네릭 타입 별칭</a><br/>
+    <a href="https://stbhg5.tistory.com/410">제네릭 클래스</a><br/>
     <br/>
