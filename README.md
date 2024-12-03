@@ -66,3 +66,8 @@
     <a href="https://stbhg5.tistory.com/410">제네릭 클래스</a><br/>
     <a href="https://stbhg5.tistory.com/411">프로미스와 제네릭</a><br/>
     <br/>
+
+<p>섹션 8. 타입 조작하기<p/>
+    <a href="https://stbhg5.tistory.com/412">타입 조작하기</a><br/>
+    <br/>
+    
