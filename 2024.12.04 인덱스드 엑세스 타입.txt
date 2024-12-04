@@ -1,0 +1,98 @@
+[2024.12.04 인덱스드 엑세스 타입]
+
+한 입 크기로 잘라먹는 타입스크립트 - 인덱스드 엑세스 타입 (Indexed Access Type)
+
+
+1. 인덱스드 엑세스 타입
+인덱스를 이용하여 다른 타입 내에 특정 프로퍼티의 타입을 추출하는 타입. (특정 프로퍼티 타입을 뽑아서 변수에 정의해줄 수 있도록 도와줌)
+
+1) 객체
+- chapter0.ts
+/**
+ * 인덱스드 엑세스 타입
+ */
+// 객체
+interface Post {
+    title: string;
+    content: string;
+    author: {
+        id: number;
+        name: string;
+        age: number;
+    };
+}
+
+// function printAuthorInfo(author: { id: number; name: string; age: number; }) {
+function printAuthorInfo(author: Post['author']) { // 스트링 리터럴 타입으로, 뽑아내고 싶은 프로퍼티 타입을 넣어준다.
+    console.log(`${author.name}-${author.id}`);
+}
+
+const post: Post = {
+    title: '게시글 제목'
+  , content: '게시글 본문'
+  , author: {
+        id: 1
+      , name: '송진성'
+      , age: 31
+    }
+}
+
+printAuthorInfo(post.author);
+
+원본 프로퍼티의 타입이 수정되거나 추가되어도 즉시 반영해주기 때문에 편리하다.
+특히, 인덱스드 엑세스 타입 Post['author'] 에서 스트링 리터럴 타입인 'author' 를 '인덱스' 라고 부른다.
+'인덱스'를 이용해서 특정 타입의 프로퍼티에 접근한다고 해서 인덱스드 엑세스 타입이라고 부른다.
+
+주의점 1. 인덱스에 들어가는 문자열은 값이 아닌 타입이다.
+주의점 2. 존재하지 않는 프로퍼티 명을 쓰면 오류가 발생한다.
+응용점 1. 객체 프로퍼티에서 하나의 프로퍼티 타입만 가져오고 싶다면, Post['author']['id'] 이렇게 중첩으로 대괄호를 써서 응용이 가능하다.
+
+2) 배열
+- chapter0.ts
+...
+// 배열
+type PostList = {
+    title: string;
+    content: string;
+    author: {
+        id: number;
+        name: string;
+        age: number;
+    };
+}[];
+
+function printAuthorInfo2(author: PostList[number]['author']) { // PostList[number]['author'] : 요소의 타입을 먼저 뽑고, 뽑은 타입으로부터 'author' 프로퍼티 타입 뽑아온다.
+    console.log(`${author.name}-${author.id}`);
+}
+
+const post2: PostList[number] = {
+// const post2: PostList[0] = {
+    title: '게시글 제목'
+  , content: '게시글 본문'
+  , author: {
+        id: 1
+      , name: '송진성'
+      , age: 31
+    }
+}
+
+printAuthorInfo2(post.author);
+
+PostList[number] 처럼 대괄호 안에 number 타입을 넣어주면 배열 타입으로부터 하나의 요소의 타입만 가져온다.
+PostList[0] 처럼 숫자를 넣어도 된다. 어떤 숫자를 넣던 간에, 대괄호 앞이 배열 타입이라면 배열 요소의 타입을 추출해 온다.
+
+주의점 1. 인덱스에 들어가는 숫자는 값이 아닌 타입이다. (넘버 리터럴 타입)
+
+3) 튜플
+- chapter0.ts
+...
+// 튜플
+type Tup = [number, string, boolean];
+type Tup0 = Tup[0];
+type Tup1 = Tup[1];
+type Tup2 = Tup[2];
+// type Tup3 = Tup[3]; // 존재하지 않는 인덱스 타입 추출하려고 하면 오류
+type TupNum = Tup[number]; // 최적의 공통 타입 뽑아옴 : 세 타입의 유니온 타입
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
