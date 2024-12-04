@@ -69,5 +69,6 @@
 
 <p>섹션 8. 타입 조작하기<p/>
     <a href="https://stbhg5.tistory.com/412">타입 조작하기</a><br/>
+    <a href="https://stbhg5.tistory.com/413">인덱스드 엑세스 타입</a><br/>
     <br/>
     
