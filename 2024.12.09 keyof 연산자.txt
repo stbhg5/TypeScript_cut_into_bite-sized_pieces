@@ -1,0 +1,46 @@
+[2024.12.09 keyof 연산자]
+
+한 입 크기로 잘라먹는 타입스크립트 - keyof 연산자 (Keyof Operator)
+
+
+1. keyof 연산자
+해당 객체 타입의 모든 프로퍼티의 key 를 유니온 타입으로 추출.
+무조건 타입에만 사용할 수 있는 연산자.
+
+- chapter1.ts
+/**
+ * keyof 연산자
+ */
+interface Person {
+    name: string;
+    age: number;
+}
+
+function getPropertyKey(person: Person, key: keyof Person) { // keyof Person : 'name' | 'age'
+    return person[key];
+}
+
+const person: Person = {
+    name: '송진성'
+  , age: 31
+};
+
+getPropertyKey(person, 'name'); // 송진성
+
+// typeof 연산자(특정 변수의 타입을 string 값으로 반환하는 연산자)와 함께 사용
+// 타입스크립트에서 타입을 정의할 때 사용하면 동작이 바뀜
+type Person2 = typeof person2; // 변수의 타입을 추론해서 타입 별칭에 정의
+
+function getPropertyKey2(person: Person2, key: keyof typeof person2) {
+    return person[key];
+}
+
+const person2 = {
+    name: '송진성'
+  , age: 31
+};
+
+getPropertyKey2(person2, 'name'); // 송진성
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
