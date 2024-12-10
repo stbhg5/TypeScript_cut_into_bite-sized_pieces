@@ -1,0 +1,93 @@
+[2024.12.10 맵드 타입]
+
+한 입 크기로 잘라먹는 타입스크립트 - 맵드 타입 (Mapped Type)
+
+
+1. 맵드 타입
+특정 객체 타입을 원하는데로 변환이 가능하기 때문에, 하나의 객체 타입으로 다양한 상황에 대처가 가능하다.
+주의할 점은, 맵드 타입은 인터페이스에서는 쓸 수 없기 때문에 타입 별칭으로만 사용해야 한다.
+활용도가 굉장히 높고 실무에서도 자주 쓰이는 타입이다.
+
+- chapter2.ts
+/**
+ * 맵드 타입
+ */
+interface User {
+    id: number;
+    name: string;
+    age: number;
+}
+
+// 한 명의 유저 정보를 불러오는 기능
+function fetchUser(): User {
+    // ... 기능
+    return {
+        id: 1
+      , name: '송진성'
+      , age: 31
+    };
+}
+
+// 한 명의 유저 정보를 수정하는 기능
+function updateUser(user: User) {
+    // ... 수정하는 기능
+}
+
+// 객체에서 바뀌지 않는 값도 다 넣어줘야 한다
+updateUser({
+    id: 1
+  , name: '송진성'
+  , age: 32
+});
+
+
+// 해결책
+// 중복 인터페이스 생성
+interface PartialUser {
+    id?: number;
+    name?: string;
+    age?: number;
+}
+function updateUser2(user: PartialUser) {
+    // ... 수정하는 기능
+}
+updateUser2({
+    age: 32
+});
+
+
+// 맵드 타입 이용한 해결책
+type PartialUser2 = {
+    // [key]: value
+    // [string 리터럴 타입]: value 의 타입
+    [key in 'id' | 'name' | 'age']?: User[key]; // 맵드 타입이 정의하는 모든 프로퍼티가 다 선택적 프로퍼티가 됨
+};
+
+// 맵드 타입 활용
+type BooleanUser = {
+    [key in 'id' | 'name' | 'age']: boolean;
+};
+
+// 맵드 타입 + keyof 연산자 활용
+type BooleanUser2 = {
+    [key in keyof User]: boolean; // key 를 P 와 같은 다른 변수로 바꿀 수 있다.
+};
+
+// 읽기전용 객체
+type ReadonlyUser = {
+    readonly [key in keyof User]: User[key];
+}
+function fetchUser2(): ReadonlyUser {
+    // ... 기능
+    return {
+        id: 1
+      , name: '송진성'
+      , age: 31
+    };
+}
+
+const user = fetchUser2();
+// user.id = 1; // 읽기전용이라 수정 불가
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
