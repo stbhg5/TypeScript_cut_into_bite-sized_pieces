@@ -72,5 +72,6 @@
     <a href="https://stbhg5.tistory.com/413">인덱스드 엑세스 타입</a><br/>
     <a href="https://stbhg5.tistory.com/414">keyof 연산자</a><br/>
     <a href="https://stbhg5.tistory.com/415">맵드 타입</a><br/>
+    <a href="https://stbhg5.tistory.com/416">템플릿 리터럴 타입</a><br/>
     <br/>
     
