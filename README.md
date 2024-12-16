@@ -74,4 +74,8 @@
     <a href="https://stbhg5.tistory.com/415">맵드 타입</a><br/>
     <a href="https://stbhg5.tistory.com/416">템플릿 리터럴 타입</a><br/>
     <br/>
+
+<p>섹션 9. 조건부 타입<p/>
+    <a href="https://stbhg5.tistory.com/417">조건부 타입 소개</a><br/>
+    <br/>
     
