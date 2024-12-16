@@ -1,0 +1,106 @@
+[2024.12.16 조건부 타입 소개]
+
+(섹션 9. 조건부 타입)
+
+한 입 크기로 잘라먹는 타입스크립트 - 조건부 타입 (Conditional Types)
+
+
+* 실습 환경설정
+section9 폴더를 생성한 뒤, section8 폴더에서 사용했던 package-lock.json, package.json, tsconfig.json 파일을 복사하여 section9 폴더에 붙여넣는다.
+이후 package.json 파일에서 'name' 부분 값을 'section9' 로 수정한다.
+
+- package.json
+{
+  "name": "section9",
+  ...
+}
+
+이후 터미널에서 'npm i' 명령어를 입력하여 package.json 의 'dependencies' 에 명시된 외부 패키지들을 일괄적으로 설치한다.
+
+- Terminal
+npm i
+
+    added 2 packages, and audited 3 packages in 750ms
+
+    found 0 vulnerabilities
+    npm notice 
+    npm notice New minor version of npm available! 10.2.3 -> 10.9.2
+    npm notice Changelog: https://github.com/npm/cli/releases/tag/v10.9.2
+    npm notice Run npm install -g npm@10.9.2 to update!
+    npm notice 
+
+이렇게 새로운 타입스크립트 프로젝트 세팅이 완료되었다.
+이후 src 폴더를 생성하여 index.ts 파일을 만들어 제대로 동작하는지 테스트한다.
+tsc 명령어를 이용하여 컴파일 후 컴파일된 자바스크립트 파일을 확인한다.
+
+- index.ts
+console.log('Hello TS');
+
+- Terminal
+tsc
+
+- dist/index.js
+console.log('Hello TS');
+export {};
+
+컴파일 결과를 node 로 실행하고 tsx 로 실행한다.
+
+- Terminal
+node dist/index.js
+    Hello TS
+
+tsx src/index.ts
+    Hello TS
+
+타입스크립트 패키지 초기설정을 완료했다.
+실습 환경설정을 완료하였다.
+
+
+1. 조건부 타입
+삼항연산자를 이용하여 조건에 따라서 타입을 결정하는 독특한 문법.
+제네릭과 함께 쓸 때, 그 위력이 발휘된다.
+
+- chapter0.ts
+/**
+ * 조건부 타입
+ */
+// 기본적인 문법
+type A = number extends string ? string : number;
+
+// 연습 예제
+type ObjA = { // 슈퍼
+    a: number;
+};
+type ObjB = {
+    a: number;
+    b: number;
+};
+// 조건부 타입
+type B = ObjB extends ObjA ? number : string;
+
+
+/**
+ * 제네릭과 조건부 타입
+ */
+type StringNumberSwitch<T> = T extends number ? string : number;
+let varA: StringNumberSwitch<number>
+let varB: StringNumberSwitch<string>
+
+// 더 실용적인 타입 정의 예제 - 조건부 타입, 제네릭, 함수 오버로딩 모두 활용
+function removeSpaces<T>(text: T): T extends string ? string : undefined; // 함수 오버로드 시그니처
+function removeSpaces<T>(text: any) { // 구현 시그니처
+    // 함수 내부에서는 조건부 타입 결과가 어떻게 될지 알 수 없음
+    if (typeof text === 'string') {
+        // return text.replaceAll(' ', '') as any; // any 단언
+        return text.replaceAll(' ', ''); // string 타입의 값 반환하지 않으면 오버로드 시그니처가 문제 감지
+    } else {
+        // return undefined as any; // any 단언
+        return undefined; // undefined 타입의 값 반환하지 않으면 오버로드 시그니처가 문제 감지
+    }
+}
+let result = removeSpaces('hi, I am Jint');
+result.toUpperCase(); // 문자열 메서드 사용
+let result2 = removeSpaces(undefined);
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
