@@ -1,0 +1,80 @@
+[2024.12.17 분산적인 조건부 타입]
+
+한 입 크기로 잘라먹는 타입스크립트 - 분산적인 조건부 타입 (Distributive Conditional Types)
+
+
+1. 분산적인 조건부 타입
+조건부 타입을 유니온과 함께 사용할 때, 분산적으로 동작하게 되는 문법.
+조건부 타입의 동작 방식이 바뀌게 된다.
+유니온 타입으로 타입 변수를 전달하면, 한 번에 유니온 타입을 전달하는 것이 아닌 한 번씩 각 타입변수를 전달하게 된다. 그리고 그 타입들이 유니온으로 묶이게 된다.
+쉽게 말해 유니온 타입의 모든 멤버 타입들이 분리가 되고, 분리된 결과들을 각각 유니온으로 다 묶어준다.
+
+- chapter1.ts
+/**
+ * 분산적인 조건부 타입
+ */
+// 제네릭과 조건부 타입 예시
+type StringNumberSwitch<T> = T extends number ? string : number;
+let a: StringNumberSwitch<number>;
+let b: StringNumberSwitch<string>;
+let c: StringNumberSwitch<number | string>; // StringNumberSwitch<number> | StringNumberSwitch<string>
+let d: StringNumberSwitch<boolean | number | string>;
+// 1단계
+// StringNumberSwitch<boolean> |
+// StringNumberSwitch<number> |
+// StringNumberSwitch<string>
+
+// 2단계
+// number |
+// string |
+// number
+
+// 결과
+// number | string
+
+
+/**
+ * 실용적인 예제
+ */
+// 유니온에서 특정 타입만 제거하는 타입
+type Exclude<T, U> = T extends U ? never : T;
+type A = Exclude<boolean | number | string, string>;
+// 1단계
+// Exclude<boolean, string> |
+// Exclude<number, string> |
+// Exclude<string, string>
+
+// 2단계
+// boolean |
+// number |
+// never
+
+// 결과
+// boolean | number | never // never 는 공집합이므로 사라진다.
+// boolean | number
+
+// 유니온에서 특정 타입만 뽑아내는 타입
+type Extract<T, U> = T extends U ? T : never;
+type B = Extract<boolean | number | string, string>;
+// 1단계
+// Extract<boolean, string> |
+// Extract<number, string> |
+// Extract<string, string>
+
+// 2단계
+// never |
+// never |
+// string
+
+// 최종 결과
+// string
+
+
+/**
+ * 분산적인 조건부 타입이 되지 않도록 막기
+ */
+type StringNumberSwitch2<T> = [T] extends [number] ? string : number; // extends 양 옆에 대괄호로 분산방지
+let e: StringNumberSwitch2<boolean | number | string>; // 유니온 타입 전달해도 분산이 안됨
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
