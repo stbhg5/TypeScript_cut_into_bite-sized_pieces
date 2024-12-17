@@ -77,5 +77,6 @@
 
 <p>섹션 9. 조건부 타입<p/>
     <a href="https://stbhg5.tistory.com/417">조건부 타입 소개</a><br/>
+    <a href="https://stbhg5.tistory.com/418">분산적인 조건부 타입</a><br/>
     <br/>
     
