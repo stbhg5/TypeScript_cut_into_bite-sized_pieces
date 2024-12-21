@@ -1,0 +1,38 @@
+[2024.12.21 infer - 조건부 타입 내에서 타입 추론하기]
+
+한 입 크기로 잘라먹는 타입스크립트 - infer (Inference(추론))
+
+
+1. infer
+조건부 타입 내에서 특정 타입만 추론해올 수 있는 기능.
+조건식을 참으로 만드는 특정 타입을 추론한다. infer 다음으로 오는 타입을 추론하지 못하는 경우에는 조건식이 거짓이 된다.
+
+- chapter2.ts
+/**
+ * infer
+ * innference -> 추론하다
+ */
+// 함수 타입 정의
+type FuncA = () => string;
+type FuncB = () => number;
+// 조건부 타입 + infer 정의
+type ReturnType<T> = T extends () => infer R ? R : never;
+// 타입 추론 예제
+type A = ReturnType<FuncA>; // string type
+type B = ReturnType<FuncB>; // number type
+type C = ReturnType<number>; // never type - R 타입 추론 불가
+
+
+/**
+ * 쉬운 예제
+ */
+// 조건
+// 1. T 는 프로미스 타입이어야 한다.
+// 2. 프로미스 타입의 결과값 타입을 반환해야 한다.
+type PromiseUnpack<T> = T extends Promise<infer R> ? R : never;
+// 타입 기대
+type PromiseA = PromiseUnpack<Promise<number>>; // number 타입 기대
+type PromiseB = PromiseUnpack<Promise<string>>; // string 타입 기대
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
