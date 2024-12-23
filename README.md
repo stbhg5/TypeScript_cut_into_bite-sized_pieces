@@ -83,4 +83,5 @@
 
 <p>섹션 10. 유틸리티 타입<p/>
     <a href="https://stbhg5.tistory.com/420">유틸리티 타입 소개</a><br/>
+    <a href="https://stbhg5.tistory.com/421">맵드 타입 기반의 유틸리티 타입 1 - Partial, Required, Readonly</a><br/>
     <br/>
