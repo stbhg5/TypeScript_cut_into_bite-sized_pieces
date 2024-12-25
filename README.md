@@ -85,4 +85,5 @@
     <a href="https://stbhg5.tistory.com/420">유틸리티 타입 소개</a><br/>
     <a href="https://stbhg5.tistory.com/421">맵드 타입 기반의 유틸리티 타입 1 - Partial, Required, Readonly</a><br/>
     <a href="https://stbhg5.tistory.com/422">맵드 타입 기반의 유틸리티 타입 2 - Pick, Omit, Record</a><br/>
+    <a href="https://stbhg5.tistory.com/423">조건부 타입 기반의 유틸리티 타입 - Exclude, Extract, ReturnType</a><br/>
     <br/>
