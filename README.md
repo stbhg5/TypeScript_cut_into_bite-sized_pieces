@@ -87,3 +87,7 @@
     <a href="https://stbhg5.tistory.com/422">맵드 타입 기반의 유틸리티 타입 2 - Pick, Omit, Record</a><br/>
     <a href="https://stbhg5.tistory.com/423">조건부 타입 기반의 유틸리티 타입 - Exclude, Extract, ReturnType</a><br/>
     <br/>
+
+<p>섹션 11. 보너스) 리액트와 타입스크립트<p/>
+    <a href="https://stbhg5.tistory.com/424">타입스크립트 리액트 시작하기</a><br/>
+    <br/>
