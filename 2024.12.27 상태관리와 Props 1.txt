@@ -1,0 +1,311 @@
+[2024.12.27 상태관리와 Props 1]
+
+
+1. useState 와 Props 타입스크립트에서 사용하기 : Todo 리스트 앱 제작
+터미널에서 'npm run start' 명령어를 입력하여 리액트 앱을 실행한다.
+
+- Terminal
+npm run start
+
+    > section11@0.1.0 start
+    > react-scripts start
+
+    D:\개발\인프런\한 입 크기로 잘라먹는 타입스크립트(TypeScript)\onebite-typescript\section11\node_modules\resolve\lib\sync.js:113
+        throw err;
+        ^
+
+    Error: Cannot find module 'typescript' from 'D:\개발\인프런\한 입 크기로 잘라먹는 타입스크립트(TypeScript)\onebite-typescript\section11\node_modules'
+        at Function.resolveSync [as sync] (D:\개발\인프런\한 입 크기로 잘라먹는 타입스크립트(TypeScript)\onebite-typescript\section11\node_modules\resolve\lib\sync.js:111:15)
+        at getModules (D:\개발\인프런\한 입 크기로 잘라먹는 타입스크립트(TypeScript)\onebite-typescript\section11\node_modules\react-scripts\config\modules.js:119:32)
+        at Object.<anonymous> (D:\개발\인프런\한 입 크기로 잘라먹는 타입스크립트(TypeScript)\onebite-typescript\section11\node_modules\react-scripts\config\modules.js:142:18)
+        at Module._compile (node:internal/modules/cjs/loader:1376:14)
+        at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+        at Module.load (node:internal/modules/cjs/loader:1207:32)
+        at Module._load (node:internal/modules/cjs/loader:1023:12)
+        at Module.require (node:internal/modules/cjs/loader:1235:19)
+        at require (node:internal/modules/helpers:176:18)
+        at Object.<anonymous> (D:\개발\인프런\한 입 크기로 잘라먹는 타입스크립트(TypeScript)\onebite-typescript\section11\node_modules\react-scripts\config\webpack.config.js:28:17) {
+    code: 'MODULE_NOT_FOUND'
+    }
+
+    Node.js v20.10.0
+
+Node 20 버전으로 재설치가 필요하다.
+section11/node_modules 폴더를 삭제한 후 'npm i @types/node@20.10.0' 명령어를 실행하여 재설치한다.
+타입스크립트 모듈 전역 설치도 진행한다.
+
+- Terminal
+npm i @types/node@20.10.0
+    npm WARN deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+    npm WARN deprecated @babel/plugin-proposal-private-methods@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-methods instead.
+    npm WARN deprecated @babel/plugin-proposal-numeric-separator@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-numeric-separator instead.
+    npm WARN deprecated @babel/plugin-proposal-class-properties@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-class-properties instead.
+    npm WARN deprecated @babel/plugin-proposal-nullish-coalescing-operator@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-nullish-coalescing-operator instead.
+    npm WARN deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+    npm WARN deprecated stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
+    npm WARN deprecated @babel/plugin-proposal-optional-chaining@7.21.0: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-optional-chaining instead.
+    npm WARN deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+    npm WARN deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+    npm WARN deprecated rollup-plugin-terser@7.0.2: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-terser
+    npm WARN deprecated abab@2.0.6: Use your platform's native atob() and btoa() methods instead
+    npm WARN deprecated q@1.5.1: You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+    npm WARN deprecated
+    npm WARN deprecated (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
+    npm WARN deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+    npm WARN deprecated domexception@2.0.1: Use your platform's native DOMException instead
+    npm WARN deprecated sourcemap-codec@1.4.8: Please use @jridgewell/sourcemap-codec instead
+    npm WARN deprecated w3c-hr-time@1.0.2: Use your platform's native performance.now() and performance.timeOrigin.
+    npm WARN deprecated workbox-cacheable-response@6.6.0: workbox-background-sync@6.6.0
+    npm WARN deprecated workbox-google-analytics@6.6.0: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
+    npm WARN deprecated svgo@1.3.2: This SVGO version is no longer supported. Upgrade to v2.x.x.
+    npm WARN deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+
+    added 1363 packages, and audited 1364 packages in 20s
+
+    268 packages are looking for funding
+    run `npm fund` for details
+
+    8 vulnerabilities (2 moderate, 6 high)
+
+    To address all issues (including breaking changes), run:
+    npm audit fix --force
+
+    Run `npm audit` for details.
+
+npm i -g typescript       
+
+    changed 1 package in 858ms
+
+npm link typescript      
+
+    added 1 package, and audited 1366 packages in 2s
+
+    268 packages are looking for funding
+    run `npm fund` for details
+
+    8 vulnerabilities (2 moderate, 6 high)
+
+    To address all issues (including breaking changes), run:
+    npm audit fix --force
+
+    Run `npm audit` for details.
+
+하지만 이후 'npm start' 명령어를 수행해도 동일한 오류 발생.
+참고링크 : https://github.com/nodejs/help/issues/3700
+참고링크 : https://devjh.tistory.com/160
+
+따라서, section12 경로를 새로 생성하여, 'npx create-react-app . --template typescript --legacy-peer-deps' 명령어로 리액트 앱 설치.
+설치가 완료되었다면 불필요한 파일 App.test.js, logo.svg, reportWebVitals.js, setupTests.js 를 제거한다.
+index.js, App.js 에서도 제거된 파일의 import 를 삭제한다.
+
+- Terminal
+npx create-react-app . --template typescript --legacy-peer-deps
+npm install --save-dev ajv@^7
+npm start
+
+참고링크 : https://stackoverflow.com/questions/70020046/quasar-error-cannot-find-module-ajv-dist-compile-codegen
+
+성공적으로 서버가 동작한다.
+
+Todo 리스트 앱 제작을 위해, 새로운 할 일을 등록하는 에디터 기능을 만든다.
+사용자로부터 입력받는 Todo 저장을 위한 state 를 만든다.
+이후 이벤트 핸들러 사용시 타입 정의하는 방법을 알아본다.
+사용자가 입력한 값을 추가하는 버튼을 만들어 기능을 구현한다.
+참고링크 : https://xiubindev.tistory.com/100
+
+- /src/App.tsx
+import React, { useState, useRef, useEffect } from 'react';
+import './App.css';
+
+// Todo item 타입 정의
+interface Todo {
+    id: number;
+    content: string;
+}
+
+function App() {
+    /* state */
+    // text state
+    // useState : 제네릭 함수
+    const [text, setText] = useState(''); // Text 초기값 빈 문자열 설정, 기본값 설정하지 않으면 undefined 이 기본값. 따라서 초기값 설정이 권장된다.
+    // setText('hello'); // 매개변수 문자열
+    // setText(123); // 오류 발생
+    // 초기값으로 설정할 값 없는 경우, 타입변수 직접 설정.
+    // const [text, setText] = useState<string>();
+
+    // todos state
+    const [todos, setTodos] = useState<Todo[]>([]);
+
+    /* id 관리 */
+    // 레퍼런스 객체
+    const idRef = useRef(0); // React.MutableRefObject<number>
+
+    /* 이벤트 핸들러 함수 */
+    // 사용자 입력 이벤트
+    // const onChangeInput = (e: { target: { value: string } })  => { // 위험한 방식
+    const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>)  => { // 미리 정의된 이벤트 객체 타입 불러와 사용 : 안전
+        setText(e.target.value);
+    };
+    // 추가 버튼 이벤트
+    const onClickAdd = () => {
+        setTodos([
+            ...todos
+          , {
+                id: idRef.current++
+              , content: text
+            }
+        ]);
+        setText(''); // text 초기화
+    };
+
+    /* useEffect : 리액트 컴포넌트가 렌더링 될 때마다 특정 작업을 실행 */
+    useEffect(() => {
+        console.log(todos);
+    }, [todos]); // todos 바뀔때마타 실행
+
+    return (
+        <div className="App">
+            <h1>Todo</h1>
+            <input
+                value={text}
+                /*
+                onChange={(e) => {
+                    setText(e.target.value);
+                }}
+                */
+                onChange={onChangeInput}
+            />
+            <button onClick={onClickAdd}>추가</button>
+        </div>
+    );
+}
+
+export default App;
+
+input 에 텍스트를 입력 후 추가 버튼을 클릭한다.
+개발자도구 콘솔에 배열 요소가 출력되는 것을 확인할 수 있다.
+
+- 콘솔
+...
+[{...}, {...}]
+0: {id: 0, content: '123'}
+1: {id: 1, content: '456'}
+length: 2
+[[Prototype]]: Array(0)
+...
+
+Todos 에 저장된 배열을 List 로 랜더링한다.
+하지만 랜더링하기 전에 input 과 추가 버튼을 컴포넌트로 분리한다.
+분리된 컴포넌트에 props 의 타입을 정의한다.
+또한 컴포넌트에 전달할 children 도 ReactElement 를 이용하여 전달할 수 있다.
+
+- /src/App.tsx
+import React, { useState, useRef, useEffect } from 'react';
+import './App.css';
+import Editor from './components/Editor';
+
+// Todo item 타입 정의
+interface Todo {
+    id: number;
+    content: string;
+}
+
+function App() {
+    /* state */
+    // todos state
+    const [todos, setTodos] = useState<Todo[]>([]);
+
+    /* id 관리 */
+    // 레퍼런스 객체
+    const idRef = useRef(0); // React.MutableRefObject<number>
+
+    /* 이벤트 핸들러 함수 */
+    // 추가 버튼 이벤트
+    const onClickAdd = (text: string) => {
+        setTodos([
+            ...todos
+          , {
+                id: idRef.current++
+              , content: text
+            }
+        ]);
+    };
+
+    /* useEffect : 리액트 컴포넌트가 렌더링 될 때마다 특정 작업을 실행 */
+    useEffect(() => {
+        console.log(todos);
+    }, [todos]); // todos 바뀔때마타 실행
+
+    return (
+        <div className="App">
+            <h1>Todo</h1>
+            <Editor onClickAdd={onClickAdd}>
+                <div>children</div>
+            </Editor>
+        </div>
+    );
+}
+
+export default App;
+
+- /src/components/Editor.tsx
+import React, { ReactElement, useState } from 'react';
+
+// 매개변수로 받는 props 타입 정의
+interface Props {
+    onClickAdd: (text: string) => void;
+    children: ReactElement;
+}
+
+export default function Editor(props: Props) {
+    /* state */
+    // text state
+    // useState : 제네릭 함수
+    const [text, setText] = useState(''); // Text 초기값 빈 문자열 설정, 기본값 설정하지 않으면 undefined 이 기본값. 따라서 초기값 설정이 권장된다.
+    // setText('hello'); // 매개변수 문자열
+    // setText(123); // 오류 발생
+    // 초기값으로 설정할 값 없는 경우, 타입변수 직접 설정.
+    // const [text, setText] = useState<string>();
+
+    /* 이벤트 핸들러 함수 */
+    // 사용자 입력 이벤트
+    // const onChangeInput = (e: { target: { value: string } })  => { // 위험한 방식
+    const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>)  => { // 미리 정의된 이벤트 객체 타입 불러와 사용 : 안전
+        setText(e.target.value);
+    };
+    // 추가 버튼 이벤트
+    const onClickButton = () => {
+        props.onClickAdd(text);
+        setText(''); // text 초기화
+    };
+
+    return (
+        <div>
+            <input
+                value={text}
+                /*
+                onChange={(e) => {
+                    setText(e.target.value);
+                }}
+                */
+                onChange={onChangeInput}
+            />
+            <button onClick={onClickButton}>추가</button>
+        </div>
+    );
+}
+
+input 에 텍스트를 입력 후 추가 버튼을 클릭한다.
+개발자도구 콘솔에 배열 요소가 출력되는 것을 확인할 수 있다.
+
+- 콘솔
+...
+[{...}, {...}]
+0: {id: 0, content: '123'}
+1: {id: 1, content: '456'}
+length: 2
+[[Prototype]]: Array(0)
+...
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
