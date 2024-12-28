@@ -1,0 +1,225 @@
+[2024.12.28 상태관리와 Props 2]
+
+1. Todo 리스트 앱 제작 - 리스트 랜더링, 개별 아이템 삭제
+1) 리스트 랜더링
+todos state 에 저장된 여러개의 배열 아이템들을 리스트로 랜더링한다.
+
+- Terminal
+npm start
+
+- /src/App.tsx
+...
+    return (
+        <div className="App">
+            <h1>Todo</h1>
+            <Editor onClickAdd={onClickAdd}>
+                <div>children</div>
+            </Editor>
+            <div>
+                {todos.map((todo) => (<div key={todo.id}>{todo.content}</div>))}
+            </div>
+        </div>
+    );
+...
+
+div 태그 안에 랜더링되는 todo 아이템을 컴포넌트로 분리한다.
+여러 컴포넌트에서 공통으로 사용되는 타입을 유지해야 할 때, 별도의 타입스크립트 파일을 만들어서 분리하는게 좋다.
+
+- /src/types.ts
+// Todo item 타입 정의
+export interface Todo {
+    id: number;
+    content: string;
+}
+
+- /src/App.tsx
+...
+import { Todo } from './types';
+import TodoItem from './components/TodoItem';
+...
+    return (
+        <div className="App">
+            <h1>Todo</h1>
+            <Editor onClickAdd={onClickAdd}>
+                <div>children</div>
+            </Editor>
+            <div>
+                {todos.map((todo) => (<TodoItem key={todo.id} {...todo}/>))}
+            </div>
+        </div>
+    );
+...
+
+- /src/components/TodoItem.tsx
+import { Todo } from "../types";
+
+interface Props extends Todo {
+    extra: string; // 새로운 props 받을 때
+}
+
+export default function TodoItem(props: Props) {
+    return (
+        <div>
+            {props.id}번 : {props.content}
+        </div>
+    );
+}
+
+화면에 todo 아이템 컴포넌트들이 리스트로 랜더링 되는 것을 확인할 수 있다.
+
+(todo 아이템 리스트 랜더링)
+
+2) 개별 아이템 삭제
+TodoItem 컴포넌트에서 삭제 버튼과 기능을 구현한다.
+App.tsx 에서는 todos state 를 업데이트 하기 위해 삭제하는 기능을 만들어 TodoItem 컴포넌트에 props 로 전달한다.
+
+- /src/App.tsx
+...
+    /* props */
+    // 추가 버튼 클릭시 todos state 업데이트
+    const onClickAdd = (text: string) => {
+        setTodos([
+            ...todos
+          , {
+                id: idRef.current++
+              , content: text
+            }
+        ]);
+    };
+    // 삭제 버튼 클릭시 todos state 업데이트
+    const onClickDelete = (id: number) => {
+        setTodos(todos.filter((todo) => todo.id !== id));
+    }
+...
+    return (
+        <div className="App">
+            <h1>Todo</h1>
+            <Editor onClickAdd={onClickAdd}>
+                <div>children</div>
+            </Editor>
+            <div>
+                {todos.map((todo) => (<TodoItem key={todo.id} {...todo} onClickDelete={onClickDelete}/>))}
+            </div>
+        </div>
+    );
+...
+
+- /src/components/TodoItem.tsx
+import { Todo } from "../types";
+
+interface Props extends Todo {
+    // extra: string; // 새로운 props 받을 때
+    onClickDelete: (id: number) => void;
+}
+
+export default function TodoItem(props: Props) {
+    /* 이벤트 핸들러 함수 */
+    // 삭제 버튼 이벤트
+    const onClickButton = () => {
+        props.onClickDelete(props.id);
+    };
+    return (
+        <div>
+            {props.id}번 : {props.content}
+            <button onClick={onClickButton}>삭제</button>
+        </div>
+    );
+}
+
+화면에 리스트 랜더링된 아이템의 삭제 버튼을 클릭하여 삭제한다.
+
+(todo 아이템 삭제)
+
+3) useReducer
+App.tsx 의 useState 로 구현한 기능을 useReducer 를 이용하도록 변경한다.
+타입스크립트에서 useReducer 이용시, Action 객체 타입을 서로소 유니온 타입으로 정의하기 때문에, 일반적으로 dispatch 호출할 때 하는 실수들을 최대한 방지할 수 있다.
+
+- /src/App.tsx
+import React, { useState, useRef, useEffect, useReducer } from 'react';
+import './App.css';
+import Editor from './components/Editor';
+import { Todo } from './types';
+import TodoItem from './components/TodoItem';
+
+type Action = | {
+    type: 'CREATE';
+    data: {
+        id: number;
+        content: string;
+    };
+} | {
+    type: 'DELETE';
+    id: number;
+}; // 서로소 유니온 타입
+
+function reducer(state: Todo[], action: Action) {
+    switch (action.type) {
+        case 'CREATE': {
+            return [...state, action.data];
+        }
+        case 'DELETE': {
+            return state.filter((it) => it.id !== action.id);
+        }
+    }
+}
+
+function App() {
+    /* state */
+    // todos state
+    const [todos, dispatch] = useReducer(reducer, []); // useReducer 매개변수 : (reducer 상태 변화 처리 함수, 상태 초기값)
+
+    /* id 관리 */
+    // 레퍼런스 객체
+    const idRef = useRef(0); // React.MutableRefObject<number>
+
+    /* props */
+    // 추가 버튼 클릭시 todos state 업데이트
+    const onClickAdd = (text: string) => {
+        /*
+        setTodos([
+            ...todos
+          , {
+                id: idRef.current++
+              , content: text
+            }
+        ]);
+        */
+        dispatch({
+            type: 'CREATE'
+          , data: {
+                id: idRef.current++
+              , content: text
+            }
+        }); // 액션 객체 인수로 전달
+    };
+    // 삭제 버튼 클릭시 todos state 업데이트
+    const onClickDelete = (id: number) => {
+        // setTodos(todos.filter((todo) => todo.id !== id));
+        dispatch({
+            type: 'DELETE'
+          , id: id
+        }); // 액션 객체 인수로 전달
+    }
+
+    /* useEffect : 리액트 컴포넌트가 렌더링 될 때마다 특정 작업을 실행 */
+    useEffect(() => {
+        console.log(todos);
+    }, [todos]); // todos 바뀔때마타 실행
+
+    return (
+        <div className="App">
+            <h1>Todo</h1>
+            <Editor onClickAdd={onClickAdd}>
+                <div>children</div>
+            </Editor>
+            <div>
+                {todos.map((todo) => (<TodoItem key={todo.id} {...todo} onClickDelete={onClickDelete}/>))}
+            </div>
+        </div>
+    );
+}
+
+export default App;
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
