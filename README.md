@@ -91,4 +91,5 @@
 <p>섹션 11. 보너스) 리액트와 타입스크립트<p/>
     <a href="https://stbhg5.tistory.com/424">타입스크립트 리액트 시작하기</a><br/>
     <a href="https://stbhg5.tistory.com/425">상태관리와 Props 1</a><br/>
+    <a href="https://stbhg5.tistory.com/426">상태관리와 Props 2</a><br/>
     <br/>
