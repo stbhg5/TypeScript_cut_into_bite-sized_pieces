@@ -93,4 +93,6 @@
     <a href="https://stbhg5.tistory.com/425">상태관리와 Props 1</a><br/>
     <a href="https://stbhg5.tistory.com/426">상태관리와 Props 2</a><br/>
     <a href="https://stbhg5.tistory.com/427">Context API</a><br/>
+    <a href="https://stbhg5.tistory.com/428">외부 라이브러리 사용하기</a><br/>
+    <a href="https://stbhg5.tistory.com/429">타입스크립트 템플릿 소개</a><br/>
     <br/>
