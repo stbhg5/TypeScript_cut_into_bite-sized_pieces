@@ -1,0 +1,97 @@
+[2024.12.29 Context API]
+
+1. Context API
+리액트의 Context API 를 타입스크립트 환경에서 사용해본다.
+App 컴포넌트에서 todo 아이템들의 모든 상태관리 기능을 다 전담하고 있는 상황이다.
+2개의 컨텍스트를 만들어서, 하나의 컨텍스트에는 todos state 를 공급하게 만들고, 나머지 하나의 컨텍스트에서는 onClickAdd, onClickDelete 와 같은 상태변화 함수들을 공급하도록 만든다.
+
+- /src/App.tsx
+import React, { useState, useRef, useEffect, useReducer, useContext } from 'react';
+...
+/* context */
+// todos state 공급 컨텍스트
+export const TodoStateContext = React.createContext<Todo[] | null>(null);
+// dispatch 공급 컨텍스트
+export const TodoDispatchContext = React.createContext<{
+    onClickAdd: (text: string) => void;
+    onClickDelete: (id: number) => void;
+} | null>(null);
+
+/* custom hook */
+// dispatch null check
+export function useTodoDispatch() {
+    const dispatch = useContext(TodoDispatchContext);
+    if (!dispatch) throw new Error('TodoDispatchContext에 문제가 있다!');
+    return dispatch;
+}
+...
+    return (
+        <div className="App">
+            <h1>Todo</h1>
+            <TodoStateContext.Provider value={todos}>
+                <TodoDispatchContext.Provider value={{ onClickAdd, onClickDelete }}>
+                    <Editor>
+                        <div>children</div>
+                    </Editor>
+                    <div>
+                        {todos.map((todo) => (<TodoItem key={todo.id} {...todo}/>))}
+                    </div>
+                </TodoDispatchContext.Provider>
+            </TodoStateContext.Provider>
+        </div>
+    );
+...
+
+useContext 를 이용해서 TodoDispatchContext 로부터 각각의 함수를 불러와 사용하도록 Editor, TodoItem 을 수정한다.
+
+- /src/components/Editor.tsx
+import React, { ReactElement, useState } from 'react';
+import { TodoDispatchContext, useTodoDispatch } from '../App';
+...
+// 매개변수로 받는 props 타입 정의
+interface Props {
+    /*
+    onClickAdd: (text: string) => void;
+    children: ReactElement;
+    */
+}
+...
+export default function Editor(props: Props) {
+    /* custom hook */
+    const dispatch = useTodoDispatch();
+    ...
+    // 추가 버튼 이벤트
+    const onClickButton = () => {
+        // props.onClickAdd(text);
+        dispatch.onClickAdd(text);
+        setText(''); // text 초기화
+    };
+    ...
+}
+
+- /src/components/TodoItem.tsx
+import { Todo } from "../types";
+import { useTodoDispatch } from "../App";
+
+interface Props extends Todo {
+    /*
+    // extra: string; // 새로운 props 받을 때
+    onClickDelete: (id: number) => void;
+    */
+}
+
+export default function TodoItem(props: Props) {
+    /* custom hook */
+    const dispatch = useTodoDispatch();
+    
+    /* 이벤트 핸들러 함수 */
+    // 삭제 버튼 이벤트
+    const onClickButton = () => {
+        // props.onClickDelete(props.id);
+        dispatch.onClickDelete(props.id);
+    };
+    ...
+}
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
