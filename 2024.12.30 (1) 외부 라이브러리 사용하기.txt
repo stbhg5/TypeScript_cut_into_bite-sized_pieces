@@ -1,0 +1,74 @@
+[2024.12.30 (1) 외부 라이브러리 사용하기]
+
+1. 외부 라이브러리 사용하기
+외부 패키지를 설치하고 타입 오류없이 사용하는 방법을 알아본다.
+
+npm 사이트에서 외부 패키지 사용시, 타입스크립트 환경에서는 라이브러리 코드도 타입 검사를 실행하기 때문에, 라이브러리 코드들에 대한 타입 정보가 제공되지 않은 상황에서는 타입 검사가 제대로 이루어지지 않기 때문에 오류가 발생하여 바로 사용하기가 어렵다.
+react-router-dom 과 같이 타입스크립트 코드로 작성된 라이브러리는 설치하자마자 바로 사용 가능하다.
+
+참고링크 : https://www.npmjs.com/package/react-router-dom
+
+하지만 lodash 와 같이 자바스크립트로 만들어진 라이브러리는 설치해도 바로 이용할 수 없다.
+
+참고링크 : https://www.npmjs.com/package/lodash
+
+DT 마크를 클릭하면 lodash 라이브러리의 타입 정보를 갖고 있는 @types/lodash 라이브러리 페이지로 이동된다. 타입스크립트 프로젝트에서 사용 가능하다.
+
+참고링크 : https://www.npmjs.com/package/@types/lodash
+
+터미널에서 lodash 라이브러리를 설치해본다. 이후 타입스크립트 파일에서 lodash 를 선언한다.
+
+- Terminal
+npm i lodash
+
+    up to date, audited 1357 packages in 7s
+
+    269 packages are looking for funding
+    run `npm fund` for details
+
+    8 vulnerabilities (2 moderate, 6 high)
+
+    To address all issues (including breaking changes), run:
+    npm audit fix --force
+
+    Run `npm audit` for details.
+
+- /src/test.ts
+import _ from 'lodash';
+
+모듈 'lodash'에 대한 선언 파일을 찾을 수 없다는 오류가 발생한다. .js 파일이기 때문에 타입 선언을 찾을 수 없기 때문이다.
+@types/lodash 라이브러리를 설치 후 다시 선언해 본다.
+
+- Terminal
+npm i @types/lodash
+
+    added 1 package, and audited 1358 packages in 2s
+
+    269 packages are looking for funding
+    run `npm fund` for details
+
+    8 vulnerabilities (2 moderate, 6 high)
+
+    To address all issues (including breaking changes), run:
+    npm audit fix --force
+
+    Run `npm audit` for details.
+
+- /src/test.ts
+import _ from 'lodash';
+
+lodash 에 대한 타입 정보가 패키지에서 제공되기 때문에 오류가 발생하지 않는다.
+
+- package.json
+...
+    "@types/jest": "^27.5.2",
+    "@types/lodash": "^4.17.13",
+    "@types/node": "^16.18.122",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+...
+
+@types 와 같은 타입 정보를 제공하는 패키지들을 'Definitely Types' 라고 부른다.
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#

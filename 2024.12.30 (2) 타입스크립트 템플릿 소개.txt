@@ -1,0 +1,173 @@
+[2024.12.30 (2) 타입스크립트 템플릿 소개]
+
+1. 타입스크립트 템플릿
+타입스크립트로 리액트 프로젝트를 시작할 때 가장 빠르게 시작할 수 있는 도구를 소개한다.
+Create React App 의 공식문서 페이지에서 확인할 수 있다.
+
+리액트 앱을 템플릿으로 만들고 어떻게 구동되는지 살펴본다.
+section-final 폴더를 생성한 뒤, 타입스크립트 템플릿을 갖는 리액트 앱을 설치한다.
+터미널에서 'npx create-react-app . --template typescript' 명령어를 실행한다.
+
+- Terminal
+npx create-react-app . --template typescript
+
+    Creating a new React app in D:\개발\인프런\한 입 크기로 잘라먹는 타입스크립트(TypeScript)\onebite-typescript\section-final.
+
+    Installing packages. This might take a couple of minutes.
+    Installing react, react-dom, and react-scripts with cra-template-typescript...
+
+
+    added 1323 packages in 55s
+
+    266 packages are looking for funding
+    run `npm fund` for details
+    Git repo not initialized Error: Command failed: git --version
+        at checkExecSyncError (node:child_process:890:11)
+        at execSync (node:child_process:962:15)
+        at tryGitInit (D:\개발\인프런\한 입 크기로 잘라먹는 타입스크립트(TypeScript)\onebite-typescript\section-final\node_modules\react-scripts\scripts\init.js:46:5)
+        at module.exports (D:\개발\인프런\한 입 크기로 잘라먹는 타입스크립트(TypeScript)\onebite-typescript\section-final\node_modules\react-scripts\scripts\init.js:276:7)
+        at [eval]:3:14
+        at runScriptInThisContext (node:internal/vm:144:10)
+        at node:internal/process/execution:109:14
+        at [eval]-wrapper:6:24
+        at runScript (node:internal/process/execution:92:62) {
+    status: 1,
+    signal: null,
+    output: [ null, null, null ],
+    pid: 13532,
+    stdout: null,
+    stderr: null
+    }
+
+    Installing template dependencies using npm...
+
+    added 28 packages, removed 1 package, and changed 1 package in 6s
+
+    270 packages are looking for funding
+    run `npm fund` for details
+
+    We detected TypeScript in your project (src\App.test.tsx) and created a tsconfig.json file for you.
+
+    Your tsconfig.json has been populated with default values.
+
+    Removing template package using npm...
+
+
+    removed 1 package, and audited 1350 packages in 2s
+
+    270 packages are looking for funding
+    run `npm fund` for details
+
+    8 vulnerabilities (2 moderate, 6 high)
+
+    To address all issues (including breaking changes), run:
+    npm audit fix --force
+
+    Run `npm audit` for details.
+
+    Success! Created section-final at D:\개발\인프런\한 입 크기로 잘라먹는 타입스크립트(TypeScript)\onebite-typescript\section-final
+    Inside that directory, you can run several commands:
+
+    npm start
+        Starts the development server.
+
+    npm run build
+        Bundles the app into static files for production.
+
+    npm test
+        Starts the test runner.
+
+    npm run eject
+        Removes this tool and copies build dependencies, configuration files
+        and scripts into the app directory. If you do this, you can’t go back!
+
+    We suggest that you begin by typing:
+
+    cd D:\개발\인프런\한 입 크기로 잘라먹는 타입스크립트(TypeScript)\onebite-typescript\section-final
+    npm start
+
+    Happy hacking!
+
+설치가 완료되면 Create React App 이 자동으로 타입스크립트 템플릿으로 시작된다.
+tsconfig.json 을 살펴보면 많은 옵션들이 자동으로 설정되어 있는 것을 볼 수 있다.
+
+- tsconfig.json
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "src"
+  ]
+}
+
+package.json 도 살펴보면, Definitely Types 패키지 4가지가 자동으로 설치된 것도 확인할 수 있다.
+
+- package.json
+{
+  "name": "section-final",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.122",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-scripts": "5.0.1",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+
+이렇게 Create React App 의 템플릿 옵션을 이용하여 시작부터 타입스크립트가 적용된 리액트 앱을 만들 수 있다.
+처음부터 타입스크립트로 프로젝트를 시작해야 한다면, 타입스크립트 템플릿을 이용하면 좋다.
+
+
+참고링크 : https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8#
